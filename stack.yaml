@@ -1,0 +1,10 @@
+
+flags: {}
+packages:
+- .
+extra-deps:
+- hspec-2.5.1
+- hspec-core-2.5.1
+- hspec-discover-2.5.1
+
+resolver: lts-11.11
