@@ -8,12 +8,12 @@ import Lib
 rotateCW :: Tetronimo -> Tetronimo
 rotateCW tet
     | s == OShape = tet
-    | s == IShape = rotateICW tet
-    | s == SShape = rotateSCW tet
-    | s == ZShape = rotateZCW tet
-    | s == LShape = rotateLCW tet
-    | s == JShape = rotateJCW tet
-    | s == TShape = rotateTCW tet
+    | (s == IShape) && (edgeGuard tet) = rotateICW tet
+    | (s == SShape) && (edgeGuard tet) = rotateSCW tet
+    | (s == ZShape) && (edgeGuard tet) = rotateZCW tet
+    | (s == LShape) && (edgeGuard tet) = rotateLCW tet
+    | (s == JShape) && (edgeGuard tet) = rotateJCW tet
+    | (s == TShape) && (edgeGuard tet) = rotateTCW tet
     | otherwise = tet
         where s = shape tet
 
@@ -95,10 +95,10 @@ rotateZCW :: Tetronimo -> Tetronimo
 rotateZCW tet
   | rot == Zero =
   Tetronimo
-    (Pos              (xcoord $ first tet)                (ycoord $ first tet))
+    (Pos              (xcoord $ first tet)                 (ycoord $ first tet))
     (Pos (pred        (xcoord $ second tet))  (pred        (ycoord $ second tet)))
     (Pos (succ $ succ (xcoord $ third tet))               (ycoord $ third tet))
-    (Pos              (xcoord $ fourth tet)   (pred $ pred (ycoord $ fourth tet)))
+    (Pos (succ        (xcoord $ fourth tet))   (pred        (ycoord $ fourth tet)))
     (shape tet)
     Ninety
   | rot == Ninety =
@@ -106,7 +106,7 @@ rotateZCW tet
     (Pos              (xcoord $ first tet)                (ycoord $ first tet))
     (Pos (succ        (xcoord $ second tet))  (succ        (ycoord $ second tet)))
     (Pos (pred $ pred (xcoord $ third tet))               (ycoord $ third tet))
-    (Pos (            (xcoord $ fourth tet))  (succ $ succ (ycoord $ fourth tet)))
+    (Pos (pred        (xcoord $ fourth tet))   (succ        (ycoord $ fourth tet)))
     (shape tet)
     OneEighty
   | rot == OneEighty =
@@ -114,7 +114,7 @@ rotateZCW tet
     (Pos              (xcoord $ first tet)                (ycoord $ first tet))
     (Pos (pred        (xcoord $ second tet))  (pred        (ycoord $ second tet)))
     (Pos (succ $ succ (xcoord $ third tet))               (ycoord $ third tet))
-    (Pos              (xcoord $ fourth tet)   (pred $ pred (ycoord $ fourth tet)))
+    (Pos (succ        (xcoord $ fourth tet))   (pred        (ycoord $ fourth tet)))
     (shape tet)
     TwoSeventy
   | otherwise =
@@ -122,7 +122,7 @@ rotateZCW tet
     (Pos              (xcoord $ first tet)                (ycoord $ first tet))
     (Pos (succ        (xcoord $ second tet))  (succ        (ycoord $ second tet)))
     (Pos (pred $ pred (xcoord $ third tet))               (ycoord $ third tet))
-    (Pos (            (xcoord $ fourth tet))  (succ $ succ (ycoord $ fourth tet)))
+    (Pos (pred        (xcoord $ fourth tet))   (succ        (ycoord $ fourth tet)))
     (shape tet)
     Zero
         where rot = (rotation tet)
@@ -153,23 +153,23 @@ rotateTCW tet
     (Pos (pred x4) (succ y4))
     (shape tet)
     TwoSeventy
-  | otherwise =
+  | rot == TwoSeventy =
   Tetronimo
-    (Pos (pred x1) (pred y1))
+    (Pos (pred x1) (succ y1))
     (Pos       x2        y2)
     (Pos (succ x3) (pred y3))
     (Pos (succ x4) (succ y4))
     (shape tet)
     Zero
-      where rot = (rotation tet)
-            x1 = (xcoord $ first tet)
-            x2 = (xcoord $ second tet)
-            x3 = (xcoord $ third tet)
-            x4 = (xcoord $ fourth tet)
-            y1 = (ycoord $ first tet)
-            y2 = (ycoord $ second tet)
-            y3 = (ycoord $ third tet)
-            y4 = (ycoord $ fourth tet)
+        where rot = (rotation tet)
+              x1 = (xcoord $ first tet)
+              x2 = (xcoord $ second tet)
+              x3 = (xcoord $ third tet)
+              x4 = (xcoord $ fourth tet)
+              y1 = (ycoord $ first tet)
+              y2 = (ycoord $ second tet)
+              y3 = (ycoord $ third tet)
+              y4 = (ycoord $ fourth tet)
 
 rotateLCW :: Tetronimo -> Tetronimo
 rotateLCW tet
@@ -259,3 +259,19 @@ rotateJCW tet
             y2 = (ycoord $ second tet)
             y3 = (ycoord $ third tet)
             y4 = (ycoord $ fourth tet)
+
+edgeGuard :: Tetronimo -> Bool
+edgeGuard tet
+  | (pred x1) < 0 = False
+  | (pred x2) < 0 = False
+  | (pred x3) < 0 = False
+  | (pred x4) < 0 = False
+  | (succ x1) > 9 = False
+  | (succ x2) > 9 = False
+  | (succ x3) > 9 = False
+  | (succ x4) > 9 = False
+  | otherwise     = True
+    where x1 = (xcoord $ first tet)
+          x2 = (xcoord $ second tet)
+          x3 = (xcoord $ third tet)
+          x4 = (xcoord $ fourth tet)

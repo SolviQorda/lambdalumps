@@ -31,8 +31,6 @@ highestInColumn blocks q
   | otherwise          = maximum $ obstructions
       where obstructions = filter (\x -> (xcoord x) == q) blocks
 
-      --collect all x coords taken up by the tet, find the highest among them --> that determines the difference
-
 --Columns occupied by the tetronimo
 tetColumns :: Tetronimo -> [Int]
 tetColumns tet = nub $ [(xcoord $ first tet), (xcoord $ second tet), (xcoord $ third tet), (xcoord $ fourth tet)]

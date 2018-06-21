@@ -3,6 +3,8 @@ module Spec where
 import Test.Hspec
 import Control.Exception (evaluate)
 import Lib
+import IO.RandomTetronimo
+import IO.Drop
 
 main :: IO ()
 main = hspec $ do
@@ -13,17 +15,15 @@ main = hspec $ do
    --a test for four bottom rows that have all been filled with i's, except for the 10th, where an i tetronimo is one move away from settled -> it should return a gamestate with no settled blocks
     it "returns a gamestate with no settled blocks, when a tenth i tetronimo is slotted in amongst 9 others" $ do
       (settledTetronimos $ settle (spawn 4) g2) `shouldBe` []
-
-
  --
 
 g1 :: Gamestate
-g1 = Gamestate next current test1blocks
+g1 = Gamestate next current test1blocks 13 0
   where next    = spawn 4
         current = spawn 4
 
 g2 :: Gamestate
-g2 = Gamestate next current test2blocks
+g2 = Gamestate next current test2blocks 13 0
   where next    = spawn 4
         current = test2tet
 
@@ -47,9 +47,9 @@ test2blocks = [Pos 0 0, Pos 0 1, Pos 0 2, Pos 0 3,
 
 --i tetronimo to slot in
 test2tet :: Tetronimo
-test2tet =  Tetronimo (Pos 9 0) (Pos 9 1) (Pos 9 2) (Pos 9 3)
+test2tet =  Tetronimo (Pos 9 0) (Pos 9 1) (Pos 9 2) (Pos 9 3) IShape Zero
 
 result2 :: Gamestate
-result2 = Gamestate next current []
+result2 = Gamestate next current [] 13 0
   where next = spawn 4
         current = spawn 4

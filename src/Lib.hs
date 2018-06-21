@@ -1,5 +1,7 @@
 module Lib where
 
+import Score
+
 import Data.List
 import System.Random
 
@@ -11,31 +13,46 @@ gameOver setTet
 
 --what rows need to be cleared - built from the SettledBlocks dataype.
 --if length of filtered list of yPos's with ycoord = x is 10, then get rid of that sublist, look at the next sublist. 18 is the top row.
-clear :: SettledBlocks -> SettledBlocks
-clear bs = go 0 bs
+
+--TODO:make clear output a tuple of (SettledBlocks, Int) of how many rows were cleared.
+clear :: SettledBlocks -> (SettledBlocks, Int)
+clear bs = go 0 bs 0
   where
-    go z [] = []
-    go z (b:bs)
-      | z == (succ screenRoof)         = (b:bs)
-      | length ys == 10 = go (succ z) ((b:bs) \\ ys)
-      | otherwise       = go (succ z) (b:bs)
+    go z [] count = ([], count)
+    go z (b:bs) count
+      | z == (succ screenRoof)         = ((b:bs), count)
+      | length ys == 10 = go (succ z) ((b:bs) \\ ys) (succ count)
+      | otherwise       = go (succ z) (b:bs) count
         where ys = filter (\x -> ycoord x == z) (b:bs)
-
-
---TODO: a version of clear leveraging the playfield datatype, which inherits lists of settledBlocks, and then does a lookup on each row to see if it `elem` Empty -> if it doesn't then it clears.
 
 -- | Given that this is the next next tetronimo, output the gamestate that arises from that
 settle :: Tetronimo -> Gamestate -> Gamestate
 settle nxnxtet g
-  | isItSettled tet blocks = Gamestate nxnxtet nxtet (collapseBlocks . clear $ (settleTetronimo tet)++ blocks)
-  | otherwise              = Gamestate nxtet (move tet) blocks
+  | isItSettled tet blocks
+        = Gamestate nxnxtet
+                    nxtet
+                    (collapseBlocks . fst $ clearedBlocks)
+                    (succ $ (seed g))
+                    (scoreForClear (snd $ clearedBlocks) level (score g))
+                    (difficulty g)
+  | otherwise
+        = Gamestate nxtet
+                    (move tet)
+                    blocks
+                    (seed g)
+                    (scoreForSoftDrop $ score g)
+                    (difficulty g)
     where
-      tet    = currentTetronimo g
-      nxtet  = nextTetronimo g
-      blocks = settledTetronimos g
--- some gameover check.
+      tet           = currentTetronimo g
+      nxtet         = nextTetronimo g
+      blocks        = settledTetronimos g
+      clearedBlocks = clear $ ((settleTetronimo tet) ++ blocks)
 
---Using a case syntax for now until i can improve the algorithm. TODO: Decide whether to use a sorting function
+--Placeholder :: TODO make this functional
+level :: Int
+level = 3
+
+--Using a case syntax for now until i can improve the algorithm.
 -- is the pos == a block with the same x and a y that is one less
 isItSettled :: Tetronimo -> SettledBlocks -> Bool
 isItSettled tet set
@@ -49,33 +66,6 @@ isItSettled tet set
   | Pos (xcoord $ fourth tet)(pred $ ycoord $ fourth tet) `elem` set   = True
   | otherwise                                                          = False
 
---Int until I think of a better way - assuming an RNG
-spawn :: Int -> Tetronimo
-spawn x
-  -- s tetronimo
-  | x == 1    = Tetronimo (Pos 4 19) (Pos 5 19) (Pos 5 20) (Pos 6 20) SShape Zero
-  -- z tetronimo
-  | x == 2    = Tetronimo (Pos 4 19) (Pos 5 19) (Pos 3 20) (Pos 4 20) ZShape Zero
-  -- t tetronimo
-  | x == 3    = Tetronimo (Pos 3 19) (Pos 4 19) (Pos 4 20) (Pos 5 19) TShape Zero
-  -- i tetronimo
-  | x == 4    = Tetronimo (Pos 3 19) (Pos 4 19) (Pos 5 19) (Pos 6 19) IShape Zero
-  -- o tetronimo
-  | x == 5    = Tetronimo (Pos 4 19) (Pos 5 19) (Pos 4 20) (Pos 5 20) OShape Zero
-  -- j tetronimo
-  | x == 6    = Tetronimo (Pos 4 19) (Pos 5 19) (Pos 6 19) (Pos 4 20) JShape Zero
-  -- l tetronimo
-  | x == 7    = Tetronimo (Pos 3 19) (Pos 4 19) (Pos 5 19) (Pos 5 20) LShape Zero
-  --error
-  | otherwise = Tetronimo (Pos 4 19) (Pos 4 19) (Pos 4 19) (Pos 4 19) IShape Zero
-
--- getRandom :: IO Int
--- getRandom = do
---   r1 <- getStdGen
---   let (x, r2) = randomR (1, 7) r1
---   setStdGen r2
---   return x
-
 --hard set for now.
 
 screenRoof :: Int
@@ -87,7 +77,7 @@ topYCoord tet = maximum [(ycoord $ first tet), (ycoord $ second tet), (ycoord $ 
 lowYCoord :: Tetronimo -> Int
 lowYCoord tet = minimum [(ycoord $ first tet), (ycoord $ second tet), (ycoord $ third tet), (ycoord $ fourth tet)]
 
---just a one cell fall for now TODO: handle input, direction, rotation.
+--just a one tetronimo fall
 move :: Tetronimo -> Tetronimo
 move tet = Tetronimo
             (Pos (xcoord $ first tet) (pred (ycoord $ first tet)))
@@ -97,23 +87,28 @@ move tet = Tetronimo
             (shape tet)
             (rotation tet)
 
+--just a one cell fall
 moveBlock :: Pos -> Pos
 moveBlock bloc = Pos (xcoord bloc) (pred $ ycoord bloc)
---helper function for clear - moves all settledBlocks down by one.
 
---this isn't going to work because it will return an empty list for all the empty rows.
+--need to make sure I can handle multiple lines falling down.
+--helper function for clear - moves all settledBlocks down by one.
 collapseBlocks :: SettledBlocks -> SettledBlocks
-collapseBlocks xs = go 1 xs
+collapseBlocks xs = go 0 xs
   where
     go z xs
     --for x in xs // or fo rz
     --are there blocks on row z? is there an empty row below x?
-      | z == (succ screenRoof) = xs
-      | (length $ qs) == 0                = go (succ z) xs
-      | ((length $ qs) > 0) && (length ys == 0)        = go (succ z) (map moveBlock qs)
-      | otherwise              = go (succ z) xs
+      | z == (succ screenRoof)                          = xs
+      --if the current row has no blocks, then there's nothing to fall
+      | (length $ qs) == 0                             = go (succ z) xs
+      --if there are blocks in this row and none below, move all blocks down
+      | (z > 0) && ((length $ qs) > 0) && (length ys == 0)        = go (pred z) (((xs \\ qs) ++  zs))
+      | otherwise                                      = go (succ z) xs
       where qs = filter (\x -> (ycoord x) == z) xs
             ys = filter (\x -> (succ $ ycoord x) == z) xs
+            zs = map (moveBlock) qs
+--need to have a means of making a new list with the transfomred qs, and the remaining xs, minus the old qs.
 
 settleTetronimo :: Tetronimo -> SettledBlocks
 settleTetronimo tet = [first tet, second tet, third tet, fourth tet]
@@ -125,7 +120,11 @@ data Gamestate =
   Gamestate {
     nextTetronimo     :: Tetronimo,
     currentTetronimo  :: Tetronimo,
-    settledTetronimos :: SettledBlocks
+    settledTetronimos :: SettledBlocks,
+    --For the RNG TODO: implement
+    seed              :: Int,
+    score             :: Int,
+    difficulty        :: Int
 }
 
 --list of settled tetronimos - no longer matters what shape they are, so we just have a list.
