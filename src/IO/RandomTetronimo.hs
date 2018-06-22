@@ -42,6 +42,17 @@ spawn x
   --error
   | otherwise = Tetronimo (Pos 4 19) (Pos 4 19) (Pos 4 19) (Pos 4 19) IShape Zero
 
+spawnCode :: Shape -> Int
+spawnCode shape
+  | shape == SShape = 1
+  | shape == ZShape = 2
+  | shape == TShape = 3
+  | shape == IShape = 4
+  | shape == OShape = 5
+  | shape == JShape = 6
+  | shape == LShape = 7
+  | otherwise       = 1
+
 --in lieu of a rng
 
 sequenceList :: [Int]

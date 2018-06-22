@@ -19,7 +19,9 @@ main = do
   putStrLn "> arrow keys to move lumps left and right"
   putStrLn "> tab to rotate tetronimos"
   putStrLn "> enter to drop"
+  putStrLn "> backspace to hold"
   putStrLn "> d to increase difficulty"
+  putStrLn "> p to pause"
   putStrLn "                                                           "
   putStrLn "> enter a number between 1 and 9 to set starting difficulty"
   difficulty <- getLine

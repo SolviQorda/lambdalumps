@@ -1,4 +1,3 @@
-
 module IO.Rotate where
 
 import Lib

@@ -32,16 +32,20 @@ settle nxnxtet g
         = Gamestate nxnxtet
                     nxtet
                     (collapseBlocks . fst $ clearedBlocks)
+                    (hold g)
                     (succ $ (seed g))
                     (scoreForClear (snd $ clearedBlocks) level (score g))
                     (difficulty g)
+                    (paused g)
   | otherwise
         = Gamestate nxtet
                     (move tet)
                     blocks
+                    (hold g)
                     (seed g)
                     (scoreForSoftDrop $ score g)
                     (difficulty g)
+                    (paused g)
     where
       tet           = currentTetronimo g
       nxtet         = nextTetronimo g
@@ -121,11 +125,13 @@ data Gamestate =
     nextTetronimo     :: Tetronimo,
     currentTetronimo  :: Tetronimo,
     settledTetronimos :: SettledBlocks,
+    hold              :: Maybe Tetronimo,
     --For the RNG TODO: implement
     seed              :: Int,
     score             :: Int,
-    difficulty        :: Int
-}
+    difficulty        :: Int,
+    paused            :: Bool
+} deriving (Eq)
 
 --list of settled tetronimos - no longer matters what shape they are, so we just have a list.
 --we therefore need to handle whether a settled tetronimo is a breach of gameover before we output the new gamestate.
@@ -139,7 +145,7 @@ data Tetronimo =
                  fourth   :: Pos,
                  shape    :: Shape,
                  rotation :: Rotation
-    } deriving (Show)
+    } deriving (Eq, Show)
 
 data Shape = IShape | LShape | JShape | SShape | ZShape | TShape | OShape deriving (Show, Eq)
 
