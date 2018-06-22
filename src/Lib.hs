@@ -73,7 +73,7 @@ isItSettled tet set
 --hard set for now.
 
 screenRoof :: Int
-screenRoof = 18
+screenRoof = 19
 
 topYCoord :: Tetronimo -> Int
 topYCoord tet = maximum [(ycoord $ first tet), (ycoord $ second tet), (ycoord $ third tet), (ycoord $ fourth tet)]

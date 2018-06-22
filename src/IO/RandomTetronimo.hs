@@ -23,24 +23,44 @@ randomNumber = do
   x <- getStdRandom $ randomR (1, 7)
   return x
 
+-- spawn :: Int -> Tetronimo
+-- spawn x
+--   -- s tetronimo
+--   | x == 1    = Tetronimo (Pos 4 19) (Pos 5 19) (Pos 5 20) (Pos 6 20) SShape Zero
+--   -- z tetronimo
+--   | x == 2    = Tetronimo (Pos 4 19) (Pos 5 19) (Pos 3 20) (Pos 4 20) ZShape Zero
+--   -- t tetronimo
+--   | x == 3    = Tetronimo (Pos 3 19) (Pos 4 19) (Pos 5 19) (Pos 4 20) TShape Zero
+--   -- i tetronimo
+--   | x == 4    = Tetronimo (Pos 3 19) (Pos 4 19) (Pos 5 19) (Pos 6 19) IShape Zero
+--   -- o tetronimo
+--   | x == 5    = Tetronimo (Pos 4 19) (Pos 5 19) (Pos 4 20) (Pos 5 20) OShape Zero
+--   -- j tetronimo
+--   | x == 6    = Tetronimo (Pos 4 19) (Pos 5 19) (Pos 6 19) (Pos 4 20) JShape Zero
+--   -- l tetronimo
+--   | x == 7    = Tetronimo (Pos 3 19) (Pos 4 19) (Pos 5 19) (Pos 5 20) LShape Zero
+--   --error
+--   | otherwise = Tetronimo (Pos 4 19) (Pos 4 19) (Pos 4 19) (Pos 4 19) IShape Zero
+
 spawn :: Int -> Tetronimo
 spawn x
   -- s tetronimo
-  | x == 1    = Tetronimo (Pos 4 19) (Pos 5 19) (Pos 5 20) (Pos 6 20) SShape Zero
+  | x == 1    = Tetronimo (Pos 4 20) (Pos 5 20) (Pos 5 21) (Pos 6 21) SShape Zero
   -- z tetronimo
-  | x == 2    = Tetronimo (Pos 4 19) (Pos 5 19) (Pos 3 20) (Pos 4 20) ZShape Zero
+  | x == 2    = Tetronimo (Pos 4 20) (Pos 5 20) (Pos 3 21) (Pos 4 21) ZShape Zero
   -- t tetronimo
-  | x == 3    = Tetronimo (Pos 3 19) (Pos 4 19) (Pos 5 19) (Pos 4 20) TShape Zero
-  -- i tetronimo
-  | x == 4    = Tetronimo (Pos 3 19) (Pos 4 19) (Pos 5 19) (Pos 6 19) IShape Zero
+  | x == 3    = Tetronimo (Pos 3 20) (Pos 4 20) (Pos 5 20) (Pos 4 21) TShape Zero
+ -- i tetronimo
+  | x == 4    = Tetronimo (Pos 3 20) (Pos 4 20) (Pos 5 20) (Pos 6 20) IShape Zero
   -- o tetronimo
-  | x == 5    = Tetronimo (Pos 4 19) (Pos 5 19) (Pos 4 20) (Pos 5 20) OShape Zero
+  | x == 5    = Tetronimo (Pos 4 20) (Pos 5 20) (Pos 4 21) (Pos 5 21) OShape Zero
   -- j tetronimo
-  | x == 6    = Tetronimo (Pos 4 19) (Pos 5 19) (Pos 6 19) (Pos 4 20) JShape Zero
+  | x == 6    = Tetronimo (Pos 4 20) (Pos 5 20) (Pos 6 20) (Pos 4 21) JShape Zero
   -- l tetronimo
-  | x == 7    = Tetronimo (Pos 3 19) (Pos 4 19) (Pos 5 19) (Pos 5 20) LShape Zero
+  | x == 7    = Tetronimo (Pos 3 20) (Pos 4 20) (Pos 5 20) (Pos 5 21) LShape Zero
   --error
-  | otherwise = Tetronimo (Pos 4 19) (Pos 4 19) (Pos 4 19) (Pos 4 19) IShape Zero
+  | otherwise = Tetronimo (Pos 4 20) (Pos 4 20) (Pos 4 20) (Pos 4 20) IShape Zero
+
 
 spawnCode :: Shape -> Int
 spawnCode shape

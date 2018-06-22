@@ -18,11 +18,11 @@ renderGame :: Int -> IO ()
 renderGame difficultyInput = do
   --TODO: Handle input from user before game begins in order to determine the difficulty and therefore the seed.
   let state = Gamestate
-                (getTetronimo 13)
-                (getTetronimo 12)
+                (getTetronimo $ s)
+                (getTetronimo $ (s + 1))
                 []
                 (Nothing)
-                (13)
+                (s)
                 (0)
                 (difficultyInput)
                 (False)
@@ -30,6 +30,7 @@ renderGame difficultyInput = do
       --this doesn't change atm TODO: alter this state through input.
        white (difficulty state) state
        renderGamestate handleEvent stepThrough
+        where s = 8 - difficultyInput
 
 --helper function
 getDisplay = InWindow "LambdaLumps" (600, 1300) (10, 10)
@@ -113,7 +114,7 @@ renderTetronimo tet = Pictures [
 
 renderNextTetronimo :: Tetronimo -> Picture
 renderNextTetronimo tet =
-          translate (-100) (380)
+          translate (-100) (360)
           $ scale (0.5) (0.5)
           $ Pictures [
             (Color tetColor $ (renderFromPos $ first tet)),
@@ -130,7 +131,7 @@ renderHeldTetronimo maybeTet
           $ scale 0.3 0.3
           $ text (":(")
   | otherwise           =
-            translate (200) (380)
+            translate (200) (360)
           $ scale (0.5) (0.5)
           $ Pictures [
             (Color tetColor $ (renderFromPos $ first tet)),
