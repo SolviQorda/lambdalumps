@@ -2,6 +2,7 @@ module IO.Drop where
 
 import Data.List
 
+import Tetronimo
 import Lib
 
 dropTet :: Tetronimo -> SettledBlocks -> Tetronimo

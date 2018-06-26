@@ -2,35 +2,108 @@
 
 module Render where
 
+--base
 import Data.Maybe
+
+--gloss
 import Graphics.Gloss
-import qualified Graphics.Gloss.Interface.Pure.Game
+-- import qualified Graphics.Gloss.Interface.Pure.Game
+
+--gloss-rhine
+import FRP.Rhine.Gloss
 
 --lambdalumps
 import Lib
+import Gamestate
+import Tetronimo as T
+
+--lamdbdalumps io
 import IO.Interface
 import IO.LeftRight
 import IO.RandomTetronimo
 import IO.Rotate
 
--- --TODO: refactor this away from do syntax
+-- flowGloss Source#
+--
+-- :: Display
+-- Display mode (e.g. InWindow or FullScreen).
+-- -> Color
+-- Background color.
+-- -> Int
+-- Number of simulation steps per second of real time.
+-- -> GlossRhine a
+-- The gloss-compatible Rhine.
+--
 renderGame :: Int -> IO ()
-renderGame difficultyInput = do
-  --TODO: Handle input from user before game begins in order to determine the difficulty and therefore the seed.
-  let state = Gamestate
-                (getTetronimo $ s)
-                (getTetronimo $ (s + 1))
-                []
-                (Nothing)
-                (s)
-                (0)
-                (difficultyInput)
-                (False)
-  play getDisplay
-      --this doesn't change atm TODO: alter this state through input.
-       white (difficulty state) state
-       renderGamestate handleEvent stepThrough
-        where s = 8 - difficultyInput
+renderGame difficultyInput =  flowGloss
+                getDisplay
+                white
+                difficultyInput
+                $ glossRhine
+
+-- gloss event
+-- handleEvent :: Event -> Maybe Gamestate
+-- handleEvent $ stepThrough $ parseEvent
+--
+-- buildGlossRhine :: (Event -> Maybe a)
+--                   -- a (SyncSF representing the game loop)
+--                     -> GlossSyncSF
+--                     -> GlossRhine a
+
+---- | The main 'SyncSF' governing events, game logic and graphics.
+--   An event is produced whenever the user presses a key
+-- | GlossSyncSf ::  SyncSF Identity GlossSimulationClock [a] Picture
+--how essential is sinceStart
+--timeInfoOf sinceInit >>> arr (* 50) >>> arr gears
+--maybe timeInfoOf isnt necessary at fall
+--game = arr (not . null) >>> gamelogic >>> graphics
+game :: GlossSyncSF ()
+game =  getGamestate >>> gameLogic >>> graphics
+
+glossRhine :: GlossRhine Gamestate
+glossRhine = buildGlossRhine event game
+  where
+    --which we define in interface
+    event = parseEvent game
+
+--potentially graphics should be the only thing left in render, and the gloss stuff can go in its own module for clarity.
+
+--combine all the graphics into one picture
+graphics :: Monad m => BehaviourF m Float Gamestate Picture
+graphics = proc game@Gamestate {..} -> do
+  returnA                               -< Pictures [
+    (renderSettledBlocks blocks)
+  , (renderTetronimo tetronimo)
+  , (renderNextTetronimo next)
+  , playfieldBorder
+  , (renderScore gameScore)
+  , (renderHeldTetronimo $ hold game)
+  , renderPlayText
+  ]
+
+
+
+
+
+
+-- --TODO: refactor this away from do syntax
+-- renderGame :: Int -> IO ()
+-- renderGame difficultyInput = do
+--   --TODO: Handle input from user before game begins in order to determine the difficulty and therefore the seed.
+--   let state = Gamestate
+--                 (getTetronimo $ s)
+--                 (getTetronimo $ (s + 1))
+--                 []
+--                 (Nothing)
+--                 (s)
+--                 (0)
+--                 (difficultyInput)
+--                 (False)
+--   play getDisplay
+--       --this doesn't change atm TODO: alter this state through input.
+--        white (difficulty state) state
+--        renderGamestate handleEvent stepThrough
+--         where s = 8 - difficultyInput
 
 --helper function
 getDisplay = InWindow "LambdaLumps" (600, 1300) (10, 10)
@@ -82,7 +155,7 @@ renderGamestate game
 
 
 -- A function to step the world one iteration. It is passed the period of time (in seconds) needing to be advanced.
-
+--TODO: think that this will go with rhine-gloss
 stepThrough :: Float -> Gamestate -> Gamestate
 stepThrough _ game
   | paused game = game
@@ -106,22 +179,22 @@ renderSettledBlocks blocks = Pictures $ map renderFromPos blocks
 
 renderTetronimo :: Tetronimo -> Picture
 renderTetronimo tet = Pictures [
-      (Color tetColor $ (renderFromPos $ first tet)),
-      (Color tetColor $ (renderFromPos $ second tet)),
-      (Color tetColor $ (renderFromPos $ third tet)),
-      (Color tetColor $ (renderFromPos $ fourth tet))]
-        where tetColor = colorScheme $ (shape tet)
+      (Color tetColor $ (renderFromPos $ T.first tet)),
+      (Color tetColor $ (renderFromPos $ T.second tet)),
+      (Color tetColor $ (renderFromPos $ T.third tet)),
+      (Color tetColor $ (renderFromPos $ T.fourth tet))]
+        where tetColor = colorScheme $ (T.shape tet)
 
 renderNextTetronimo :: Tetronimo -> Picture
 renderNextTetronimo tet =
           translate (-100) (360)
           $ scale (0.5) (0.5)
           $ Pictures [
-            (Color tetColor $ (renderFromPos $ first tet)),
-            (Color tetColor $ (renderFromPos $ second tet)),
-            (Color tetColor $ (renderFromPos $ third tet)),
-            (Color tetColor $ (renderFromPos $ fourth tet))]
-                where tetColor = colorScheme $ (shape tet)
+            (Color tetColor $ (renderFromPos $ T.first tet)),
+            (Color tetColor $ (renderFromPos $ T.second tet)),
+            (Color tetColor $ (renderFromPos $ T.third tet)),
+            (Color tetColor $ (renderFromPos $ T.fourth tet))]
+                where tetColor = colorScheme $ (T.shape tet)
 
 renderHeldTetronimo :: Maybe Tetronimo -> Picture
 renderHeldTetronimo maybeTet
@@ -134,11 +207,11 @@ renderHeldTetronimo maybeTet
             translate (200) (360)
           $ scale (0.5) (0.5)
           $ Pictures [
-            (Color tetColor $ (renderFromPos $ first tet)),
-            (Color tetColor $ (renderFromPos $ second tet)),
-            (Color tetColor $ (renderFromPos $ third tet)),
-            (Color tetColor $ (renderFromPos $ fourth tet))]
-                where tetColor = colorScheme $ (shape tet)
+            (Color tetColor $ (renderFromPos $ T.first tet)),
+            (Color tetColor $ (renderFromPos $ T.second tet)),
+            (Color tetColor $ (renderFromPos $ T.third tet)),
+            (Color tetColor $ (renderFromPos $ T.fourth tet))]
+                where tetColor = colorScheme $ (T.shape tet)
                       tet = fromJust $ maybeTet
 
 colorScheme :: Shape -> Color

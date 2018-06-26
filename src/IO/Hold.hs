@@ -2,7 +2,8 @@ module IO.Hold where
 
 import Data.Maybe
 
-import Lib
+import Gamestate
+import Tetronimo
 import IO.RandomTetronimo
 
 handleHold :: Gamestate -> Gamestate

@@ -1,6 +1,8 @@
 module Lib where
 
+import Gamestate
 import Score
+import Tetronimo
 
 import Data.List
 import System.Random
@@ -119,39 +121,3 @@ settleTetronimo tet = [first tet, second tet, third tet, fourth tet]
 
 --
 -- | Types
-
-data Gamestate =
-  Gamestate {
-    nextTetronimo     :: Tetronimo,
-    currentTetronimo  :: Tetronimo,
-    settledTetronimos :: SettledBlocks,
-    hold              :: Maybe Tetronimo,
-    --For the RNG TODO: implement
-    seed              :: Int,
-    score             :: Int,
-    difficulty        :: Int,
-    paused            :: Bool
-} deriving (Eq)
-
---list of settled tetronimos - no longer matters what shape they are, so we just have a list.
---we therefore need to handle whether a settled tetronimo is a breach of gameover before we output the new gamestate.
-type SettledBlocks = [Pos]
-
---ordered from bottom to top, left to right.
-data Tetronimo =
-     Tetronimo { first    :: Pos,
-                 second   :: Pos,
-                 third    :: Pos,
-                 fourth   :: Pos,
-                 shape    :: Shape,
-                 rotation :: Rotation
-    } deriving (Eq, Show)
-
-data Shape = IShape | LShape | JShape | SShape | ZShape | TShape | OShape deriving (Show, Eq)
-
-data Rotation = Zero | Ninety | OneEighty | TwoSeventy deriving (Show, Eq)
-
-data Pos = Pos {
-  xcoord :: Int,
-  ycoord :: Int
-  } deriving (Show, Eq, Ord)

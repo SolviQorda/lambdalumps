@@ -2,7 +2,7 @@
 
 module IO.Interface where
 
-import Lib
+import Gamestate
 import IO.Drop
 import IO.Hold
 import IO.LeftRight
@@ -11,8 +11,11 @@ import IO.Rotate
 
 import Graphics.Gloss.Interface.Pure.Game as G
 
-handleEvent :: G.Event -> Gamestate -> Gamestate
-handleEvent (G.EventKey key keyState _ _ ) game
+--type issue --> where do i get the original gamestate
+--handleEvent :: Event -> Maybe Gamestate
+
+parseEvent :: G.Event -> Gamestate -> Gamestate
+parseEvent (G.EventKey key keyState _ _ ) game
     --move to the left
     | G.SpecialKey G.KeyLeft  <- key
     , G.Down                  <- keyState
