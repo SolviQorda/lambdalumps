@@ -1,6 +1,4 @@
-{-# LANGUAGE PatternGuards #-}
-
-module Render where
+module Gloss.Render where
 
 --base
 import Data.Maybe
@@ -9,81 +7,18 @@ import Data.Maybe
 import Graphics.Gloss
 -- import qualified Graphics.Gloss.Interface.Pure.Game
 
---gloss-rhine
-import FRP.Rhine.Gloss
-
 --lambdalumps
-import Lib
-import Gamestate
-import Tetronimo as T
+import Model.Lib
+import Model.Gamestate
+import Model.Tetronimo as T
 
 --lamdbdalumps io
-import IO.Interface
 import IO.LeftRight
 import IO.RandomTetronimo
 import IO.Rotate
 
--- flowGloss Source#
---
--- :: Display
--- Display mode (e.g. InWindow or FullScreen).
--- -> Color
--- Background color.
--- -> Int
--- Number of simulation steps per second of real time.
--- -> GlossRhine a
--- The gloss-compatible Rhine.
---
-renderGame :: Int -> IO ()
-renderGame difficultyInput =  flowGloss
-                getDisplay
-                white
-                difficultyInput
-                $ glossRhine
-
--- gloss event
--- handleEvent :: Event -> Maybe Gamestate
--- handleEvent $ stepThrough $ parseEvent
---
--- buildGlossRhine :: (Event -> Maybe a)
---                   -- a (SyncSF representing the game loop)
---                     -> GlossSyncSF
---                     -> GlossRhine a
-
----- | The main 'SyncSF' governing events, game logic and graphics.
---   An event is produced whenever the user presses a key
--- | GlossSyncSf ::  SyncSF Identity GlossSimulationClock [a] Picture
---how essential is sinceStart
---timeInfoOf sinceInit >>> arr (* 50) >>> arr gears
---maybe timeInfoOf isnt necessary at fall
---game = arr (not . null) >>> gamelogic >>> graphics
-game :: GlossSyncSF ()
-game =  getGamestate >>> gameLogic >>> graphics
-
-glossRhine :: GlossRhine Gamestate
-glossRhine = buildGlossRhine event game
-  where
-    --which we define in interface
-    event = parseEvent game
-
---potentially graphics should be the only thing left in render, and the gloss stuff can go in its own module for clarity.
-
---combine all the graphics into one picture
-graphics :: Monad m => BehaviourF m Float Gamestate Picture
-graphics = proc game@Gamestate {..} -> do
-  returnA                               -< Pictures [
-    (renderSettledBlocks blocks)
-  , (renderTetronimo tetronimo)
-  , (renderNextTetronimo next)
-  , playfieldBorder
-  , (renderScore gameScore)
-  , (renderHeldTetronimo $ hold game)
-  , renderPlayText
-  ]
-
-
-
-
+--Gloss wrapper
+import Gloss.Interface
 
 
 -- --TODO: refactor this away from do syntax

@@ -1,4 +1,4 @@
-module Score where
+module Model.Score where
 
 --This SCORE was used in Nintendo's versions of Tetris for NES, for Game Boy, and for Super NES.
 

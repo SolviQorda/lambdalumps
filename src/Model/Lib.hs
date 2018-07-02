@@ -1,8 +1,8 @@
-module Lib where
+module Model.Lib where
 
-import Gamestate
-import Score
-import Tetronimo
+--LambdaLumps
+import Model.Score
+import Model.Tetronimo
 
 import Data.List
 import System.Random
@@ -27,32 +27,6 @@ clear bs = go 0 bs 0
       | otherwise       = go (succ z) (b:bs) count
         where ys = filter (\x -> ycoord x == z) (b:bs)
 
--- | Given that this is the next next tetronimo, output the gamestate that arises from that
-settle :: Tetronimo -> Gamestate -> Gamestate
-settle nxnxtet g
-  | isItSettled tet blocks
-        = Gamestate nxnxtet
-                    nxtet
-                    (collapseBlocks . fst $ clearedBlocks)
-                    (hold g)
-                    (succ $ (seed g))
-                    (scoreForClear (snd $ clearedBlocks) level (score g))
-                    (difficulty g)
-                    (paused g)
-  | otherwise
-        = Gamestate nxtet
-                    (move tet)
-                    blocks
-                    (hold g)
-                    (seed g)
-                    (scoreForSoftDrop $ score g)
-                    (difficulty g)
-                    (paused g)
-    where
-      tet           = currentTetronimo g
-      nxtet         = nextTetronimo g
-      blocks        = settledTetronimos g
-      clearedBlocks = clear $ ((settleTetronimo tet) ++ blocks)
 
 --Placeholder :: TODO make this functional
 level :: Int

@@ -1,9 +1,11 @@
 module Main where
 
-import Render
+import RhineGloss.GameBuilder
 
 import Data.Char
 
+--Run Lambdalumps from the console with rhine-gloss
+--TODO: give console option to run with gloss or rhine-gloss
 
 main :: IO ()
 main = do
@@ -14,13 +16,15 @@ main = do
   putStrLn "-----------------------------------------------------------"
   putStrLn "----------------------by Solvi Naja------------------------"
   putStrLn "-----------------------------------------------------------"
+  putStrLn "> press 'r' to load the game with rhine-gloss, or 'g' to load the game with just gloss"
+  backend <- getLine
   putStrLn "  CONTROLS:"
   putStrLn "                                                           "
   putStrLn "> arrow keys to move lumps left and right"
   putStrLn "> tab to rotate tetronimos"
   putStrLn "> enter to drop"
   putStrLn "> backspace to hold"
-  putStrLn "> d to increase difficulty"
+  -- putStrLn "> d to increase difficulty"
   putStrLn "> p to pause"
   putStrLn "                                                           "
   putStrLn "> enter a number between 1 and 9 to set starting difficulty"

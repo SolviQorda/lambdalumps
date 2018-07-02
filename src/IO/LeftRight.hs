@@ -1,6 +1,6 @@
 module IO.LeftRight where
 
-import Tetronimo
+import Model.Tetronimo
 
 tetronimoLeft :: Tetronimo -> SettledBlocks -> Tetronimo
 tetronimoLeft tet blocks

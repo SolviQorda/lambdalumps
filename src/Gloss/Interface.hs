@@ -1,18 +1,23 @@
 {-# LANGUAGE PatternGuards #-}
 
-module IO.Interface where
+module Gloss.Interface where
 
-import Gamestate
+--lambdalumps
+import Model.Gamestate
+
+--lambdalumps io
 import IO.Drop
 import IO.Hold
 import IO.LeftRight
 import IO.RandomTetronimo
 import IO.Rotate
 
+--gloss package
 import Graphics.Gloss.Interface.Pure.Game as G
 
---type issue --> where do i get the original gamestate
---handleEvent :: Event -> Maybe Gamestate
+handleEvent :: Event -> Maybe Gamestate
+handleEvent e = Just $ parseEvent e getGamestate
+
 
 parseEvent :: G.Event -> Gamestate -> Gamestate
 parseEvent (G.EventKey key keyState _ _ ) game
@@ -64,7 +69,7 @@ parseEvent (G.EventKey key keyState _ _ ) game
     | G.SpecialKey G.KeyShiftL   <- key
     , G.Down                     <- keyState
     = handleHold game
-handleEvent (G.EventKey key keyState _ _) game
+parseEvent (G.EventKey key keyState _ _) game
     -- reset game TODO: Introduce the random tetronimo function
     | G.Char 'r'                <- key
     , G.Down                    <- keyState
@@ -96,7 +101,7 @@ handleEvent (G.EventKey key keyState _ _) game
                 (score game)
                 (succ $ difficulty game)
                 (handlePause $ paused game)
-handleEvent _ game
+parseEvent _ game
     = game
 
 handlePause :: Bool -> Bool

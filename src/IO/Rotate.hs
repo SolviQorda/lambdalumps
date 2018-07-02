@@ -1,6 +1,6 @@
 module IO.Rotate where
 
-import Tetronimo
+import Model.Tetronimo
 
 --Rotation Functions
 
