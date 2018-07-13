@@ -44,7 +44,6 @@ library
       Model.Tetronimo
       IO.Drop
       IO.Hold
-      IO.Interface
       IO.LeftRight
       IO.RandomTetronimo
       IO.Rotate

@@ -8,13 +8,15 @@ The source files do also contain implementation for the game in [Gloss](https://
 
 1. `git clone https://github.com/SolviQorda/LambdaLumps`
 
-2. Ensure that Haskell and Cabal are installed
+2. `cd LambdaLumps`
 
-3. `cabal sandbox init
+3. Ensure that [Haskell](https://www.haskell.org/platform) is installed. Cabal is included in the Haskell platform.
 
-   `cabal update`
+4. `cabal sandbox init`
 
-4. `cabal install --only-dependencies`
+5. `cabal update`
+
+4. `cabal install --only-dependencies` (if you already have cabal packages installed, you might get a recommendation to use the --force-reinstalls flags)
 
 5. `cabal build`
 
