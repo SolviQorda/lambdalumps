@@ -23,4 +23,4 @@ The source files do also contain implementation for the game in [Gloss](https://
 6. `cabal run lambdalumps`
 
 
-Recommended settings: gloss backend, and level 3 difficulty.
+Recommended settings: backend = gloss, and level 3 difficulty.
