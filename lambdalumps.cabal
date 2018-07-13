@@ -1,0 +1,80 @@
+-- This file has been generated from package.yaml by hpack version 0.20.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 65e128664ae84a83bd7211bea408365ff44aa57894ff7580b33a233405a63ef1
+
+name:           lambdalumps
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/githubuser/lambdalumps#readme>
+homepage:       https://github.com/SolviQorda/lambdalumps#readme
+bug-reports:    https://github.com/SolviQorda/lambdalumps/issues
+author:         Solvi Naja
+maintainer:     example@example.com
+license-file:   LICENSE
+build-type:     Simple
+cabal-version:  >= 1.10
+
+extra-source-files:
+    ChangeLog.md
+    README.md
+
+source-repository head
+  type: git
+  location: https://github.com/SolviQorda/lambdalumps
+
+library
+  hs-source-dirs:
+      src
+  build-depends:
+      base >=4.7 && <5
+    , hspec >= 2.4 && <= 2.5.1
+    , random == 1.1
+    , QuickCheck >= 2.11.0 && <= 2.11.3
+    , gloss <= 1.12.0.0
+    , dunai == 0.4.0.0
+    , rhine == 0.4.0.0
+    , rhine-gloss
+  exposed-modules:
+      Gamestate
+      Lib
+      Render
+      Score
+      Tetronimo
+      IO.Drop
+      IO.Hold
+      IO.Interface
+      IO.LeftRight
+      IO.RandomTetronimo
+      IO.Rotate
+  other-modules:
+      Paths_lambdalumps
+  default-language: Haskell2010
+
+executable lambdalumps-exe
+  main-is: Main.hs
+  hs-source-dirs:
+      app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , hspec >= 2.4 && <= 2.5.1
+    , gloss <= 1.12.0.0
+    , lambdalumps
+  other-modules:
+      Paths_lambdalumps
+  default-language: Haskell2010
+
+test-suite lambdalumps-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  hs-source-dirs:
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , hspec >= 2.4 && <= 2.5.1
+    , lambdalumps
+  other-modules:
+      Paths_lambdalumps
+  default-language: Haskell2010
