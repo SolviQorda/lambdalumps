@@ -3,8 +3,15 @@ flags: {}
 packages:
 - .
 extra-deps:
+- dunai-0.4.0.0
 - hspec-2.5.1
 - hspec-core-2.5.1
 - hspec-discover-2.5.1
+- QuickCheck-2.11.3
+- rhine-0.4.0.0
+- rhine-gloss-0.4.0.0
+- free-4.12.4
+- time-1.6.0.1
+
 
 resolver: lts-11.11
