@@ -21,24 +21,24 @@ import IO.Rotate
 import Gloss.Interface
 
 
--- --TODO: refactor this away from do syntax
--- renderGame :: Int -> IO ()
--- renderGame difficultyInput = do
---   --TODO: Handle input from user before game begins in order to determine the difficulty and therefore the seed.
---   let state = Gamestate
---                 (getTetronimo $ s)
---                 (getTetronimo $ (s + 1))
---                 []
---                 (Nothing)
---                 (s)
---                 (0)
---                 (difficultyInput)
---                 (False)
---   play getDisplay
---       --this doesn't change atm TODO: alter this state through input.
---        white (difficulty state) state
---        renderGamestate handleEvent stepThrough
---         where s = 8 - difficultyInput
+--TODO: refactor this away from do syntax
+renderGameGloss :: Int -> IO ()
+renderGameGloss difficultyInput = do
+  --TODO: Handle input from user before game begins in order to determine the difficulty and therefore the seed.
+  let state = Gamestate
+                (getTetronimo $ s)
+                (getTetronimo $ (s + 1))
+                []
+                (Nothing)
+                (s)
+                (0)
+                (difficultyInput)
+                (False)
+  play getDisplay
+      --this doesn't change atm TODO: alter this state through input.
+       white (difficulty state) state
+       renderGamestate parseEvent stepThrough
+        where s = 8 - difficultyInput
 
 --helper function
 getDisplay = InWindow "LambdaLumps" (600, 1300) (10, 10)

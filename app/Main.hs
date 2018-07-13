@@ -1,5 +1,6 @@
 module Main where
 
+import Gloss.Render
 import RhineGloss.GameBuilder
 
 import Data.Char
@@ -30,9 +31,14 @@ main = do
   putStrLn "> enter a number between 1 and 9 to set starting difficulty"
   difficulty <- getLine
   putStrLn $ "> starting LambdaLumps at level " ++ (parseDifficultyInput difficulty)
-  renderGame . digitToInt $ head $ parseDifficultyInput difficulty
+  renderGame backend .  digitToInt $ head $ parseDifficultyInput difficulty
 
 parseDifficultyInput :: String -> String
 parseDifficultyInput input
   | input `elem` ["1","2","3","4","5","6","7","8","9"] = input
   | otherwise                                          = "3"
+
+renderGame :: String -> Int -> IO ()
+renderGame s i
+  | s == "r"  = renderGameRhineGloss i
+  | otherwise = renderGameGloss      i
