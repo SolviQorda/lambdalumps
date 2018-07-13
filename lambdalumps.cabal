@@ -10,7 +10,7 @@ description:    Please see the README on GitHub at <https://github.com/githubuse
 homepage:       https://github.com/SolviQorda/lambdalumps#readme
 bug-reports:    https://github.com/SolviQorda/lambdalumps/issues
 author:         Solvi Naja
-maintainer:     example@example.com
+maintainer:     solvi.goard@gmail.com
 license-file:   LICENSE
 build-type:     Simple
 cabal-version:  >= 1.10
@@ -36,17 +36,19 @@ library
     , rhine == 0.4.0.0
     , rhine-gloss
   exposed-modules:
-      Gamestate
-      Lib
-      Render
-      Score
-      Tetronimo
+      Gloss.Interface
+      Gloss.Render
+      Model.Gamestate
+      Model.Lib
+      Model.Score
+      Model.Tetronimo
       IO.Drop
       IO.Hold
       IO.Interface
       IO.LeftRight
       IO.RandomTetronimo
       IO.Rotate
+      RhineGloss.GameBuilder
   other-modules:
       Paths_lambdalumps
   default-language: Haskell2010

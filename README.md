@@ -1,20 +1,24 @@
-# lambdalumps
+# Lambdalumps
 
-Installation
+LambdaLumps is a Tetris clone written in Haskell, structured in a way that the game model is independent of any rendering packages.
 
-(in a folder you've chosen for the game)
+The source files do also contain implementation for the game in [Gloss](https://hackage.haskell.org/package/gloss), and an implementation using [Gloss-Rhine](https://hackage.haskell.org/package/rhine-gloss) is currently under construction (unstable).
 
-git clone https://github.com/SolviQorda/LambdaLumps
+# Installation
 
-(if you see the warning git not found, use sudo apt-get install git
-  you'll need   your password for this - then try the git clone command again)
+1. `git clone https://github.com/SolviQorda/LambdaLumps`
 
-cd lambdalumps
+2. Ensure that Haskell and Cabal are installed
 
-sudo apt-get install cabal
+3. `cabal sandbox init
 
-cabal sandbox init
-cabal install --only-dependencies
-cabal build
+   `cabal update`
 
-cabal run lambdalumps
+4. `cabal install --only-dependencies`
+
+5. `cabal build`
+
+6. `cabal run lambdalumps`
+
+
+Recommended settings: gloss backend, and level 3 difficulty.
