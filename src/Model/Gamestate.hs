@@ -11,7 +11,7 @@ import Model.Score
 import Model.Tetronimo
 --lambdalumps io
 import IO.RandomTetronimo
-
+import IO.Rotate
 --rhine
 import FRP.Rhine
 import FRP.Rhine.SyncSF.Except
@@ -30,44 +30,20 @@ data Gamestate =
     paused            :: Bool
 } deriving (Eq)
 
--- logic of the whole app
--- gameLogic
---   :: (Monad m, TimeDomain td, Diff td ~ Float)
---   => BehaviorF m td Float Gamestate
--- gameLogic = feedback 0 $ proc (eventRequest, seedOld) -> do
---     -- settle               <- currrentTetronimo     -< getGamestate
---   -- -- nextTetronimo     :: Tetronimo,
---     nextTetronimo     <- getRandomTetronimo          -< (seed + 1)
---   -- -- currentTetronimo  :: Tetronimo,
---   -- currentTetronimo  <- getTetronimo          -< (seed)
---   -- -- settledTetronimos :: SettledBlocks,
---   -- settledTetronimos <- settledTetronimos     -< getGamestate?
---   -- -- hold              :: Maybe Tetronimo,
---   -- hold              <- hold                   -< getGamestate?
---   -- -- seed              :: Int,
---     seed                                        -< seedOld
---     -- score             <- score                  -< getGamestate?
---   -- -- score             :: Int,
---   -- -- difficulty        :: Int,
---   -- difficulty        <-
---   -- paused            <-   paused              -< getGamestate
---     returnA                                    -< (Gamestate {..}, 3)
-
-  -- stepThrough :: Float -> Gamestate -> Gamestate
-  -- stepThrough _ game
-  --   | paused game = game
-  --   | otherwise =
-  --        settle nxnxtet (Gamestate
-  --                         (nextTetronimo game)
-  --                         (currentTetronimo game)
-  --                         (settledTetronimos game)
-  --                         (hold game)
-  --                         (seed game)
-  --                         (score game)
-  --                         (difficulty game)
-  --                         (paused game))
-  --                             where nxnxtet = getTetronimo (seed game)
-
+stepThru ::  Gamestate -> Float -> Gamestate
+stepThru game _
+  | paused game = game
+  | otherwise =
+       settle nxnxtet (Gamestate
+                        (nextTetronimo game)
+                        (currentTetronimo game)
+                        (settledTetronimos game)
+                        (hold game)
+                        (seed game)
+                        (score game)
+                        (difficulty game)
+                        (paused game))
+                         where nxnxtet = getTetronimo (seed game)
 
 getGamestate :: Gamestate
 getGamestate = initialGamestate
@@ -84,6 +60,10 @@ nextGamestate game = settle nxnxtet (Gamestate
                        (paused game))
                            where nxnxtet = getTetronimo (seed game)
 
+--attempting to write a monadic instance to pass in a FRP.Behaviour
+nextGamestate' ::  Gamestate -> Maybe Gamestate
+nextGamestate' game  = do
+  Just game
 
 initialGamestate :: Gamestate
 initialGamestate = Gamestate
