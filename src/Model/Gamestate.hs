@@ -10,12 +10,13 @@ import Model.Lib
 import Model.Score
 import Model.Tetronimo
 --lambdalumps io
-import IO.RandomTetronimo
+import Model.RandomTetronimo
 import IO.Rotate
 --rhine
 import FRP.Rhine
 import FRP.Rhine.SyncSF.Except
 
+import Data.Fixed
 
 data Gamestate =
   Gamestate {
@@ -30,20 +31,6 @@ data Gamestate =
     paused            :: Bool
 } deriving (Eq)
 
-stepThru ::  Gamestate -> Float -> Gamestate
-stepThru game _
-  | paused game = game
-  | otherwise =
-       settle nxnxtet (Gamestate
-                        (nextTetronimo game)
-                        (currentTetronimo game)
-                        (settledTetronimos game)
-                        (hold game)
-                        (seed game)
-                        (score game)
-                        (difficulty game)
-                        (paused game))
-                         where nxnxtet = getTetronimo (seed game)
 
 getGamestate :: Gamestate
 getGamestate = initialGamestate

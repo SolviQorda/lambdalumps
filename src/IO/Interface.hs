@@ -1,23 +1,20 @@
 {-# LANGUAGE PatternGuards #-}
 
-module Gloss.Interface where
+module IO.Interface where
 
 --lambdalumps
 import Model.Gamestate
+import Model.RandomTetronimo
 
 --lambdalumps io
 import IO.Drop
 import IO.Hold
 import IO.LeftRight
-import IO.RandomTetronimo
 import IO.Rotate
 
 --gloss package
 import Graphics.Gloss.Interface.Pure.Game as G
-
-handleEvent :: Event -> Maybe Gamestate
-handleEvent e = Just $ parseEvent e getGamestate
-
+import Graphics.Gloss
 
 parseEvent :: G.Event -> Gamestate -> Gamestate
 parseEvent (G.EventKey key keyState _ _ ) game
@@ -81,16 +78,6 @@ parseEvent (G.EventKey key keyState _ _) game
                 (0)
                 (2)
                 (False)
-    | G.Char 'd'                <- key
-    , G.Down                    <- keyState
-    = Gamestate (nextTetronimo game)
-                (currentTetronimo game)
-                (settledTetronimos game)
-                (hold game)
-                (seed game)
-                (score game)
-                (succ $ difficulty game)
-                (paused game)
     | G.Char 'p'                <- key
     , G.Down                    <- keyState
     = Gamestate (nextTetronimo game)

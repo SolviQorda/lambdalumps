@@ -5,26 +5,22 @@ import Data.Maybe
 
 --gloss
 import Graphics.Gloss
--- import qualified Graphics.Gloss.Interface.Pure.Game
 
 --lambdalumps
-import Model.Lib
+import Model.DifficultyManager
 import Model.Gamestate
+import Model.Lib
+import Model.RandomTetronimo
 import Model.Tetronimo as T
 
 --lamdbdalumps io
+import IO.Interface
 import IO.LeftRight
-import IO.RandomTetronimo
 import IO.Rotate
 
---Gloss wrapper
-import Gloss.Interface
 
-
---TODO: refactor this away from do syntax
 renderGameGloss :: Int -> IO ()
 renderGameGloss difficultyInput = do
-  --TODO: Handle input from user before game begins in order to determine the difficulty and therefore the seed.
   let state = Gamestate
                 (getTetronimo $ s)
                 (getTetronimo $ (s + 1))
@@ -35,9 +31,8 @@ renderGameGloss difficultyInput = do
                 (difficultyInput)
                 (False)
   play getDisplay
-      --this doesn't change atm TODO: alter this state through input.
-       white (difficulty state) state
-       renderGamestate parseEvent stepThrough
+      white (difficulty state) state
+      renderGamestate parseEvent stepThrough
         where s = 8 - difficultyInput
 
 --helper function
@@ -81,20 +76,17 @@ renderGamestate game
                         , playfieldBorder
                         , (renderScore gameScore)
                         , (renderHeldTetronimo $ hold game)
+                        , (renderDifficulty $ (100 - difficulty game) `div` 10)
                         , renderPlayText]
   where blocks    = settledTetronimos game
         tetronimo = currentTetronimo game
         gameScore = score game
         next      = nextTetronimo game
 
-
-
--- A function to step the world one iteration. It is passed the period of time (in seconds) needing to be advanced.
---TODO: think that this will go with rhine-gloss
 stepThrough :: Float -> Gamestate -> Gamestate
-stepThrough _ game
+stepThrough steps game
   | paused game = game
-  | otherwise =
+  | otherwise   =
        settle nxnxtet (Gamestate
                         (nextTetronimo game)
                         (currentTetronimo game)
@@ -102,9 +94,9 @@ stepThrough _ game
                         (hold game)
                         (seed game)
                         (score game)
-                        (difficulty game)
+                        (difficultyValue steps)
                         (paused game))
-                            where nxnxtet = getTetronimo (seed game)
+     where nxnxtet = getTetronimo (seed game)
 
 playfieldBorder :: Picture
 playfieldBorder = Color orange $ rectangleWire 500 1100
@@ -179,11 +171,27 @@ renderPlayText = Pictures [
       $ text ("next:")]
 
 renderScore :: Int -> Picture
-renderScore score =
+renderScore score = Pictures [
   Color black
-  $ translate (-20) (-600)
+  $ translate (-250) (-600)
   $ scale 0.3 0.3
-  $ text (show score)
+  $ text ("score: "),
+  Color black
+  $ translate (-140) (-600)
+  $ scale 0.3 0.3
+  $ text (show score) ]
+
+renderDifficulty :: Int -> Picture
+renderDifficulty difficulty = Pictures [
+  Color black
+  $ translate (50) (-600)
+  $ scale 0.3 0.3
+  $ text ("difficulty: "),
+  Color black
+  $ translate (205) (-600)
+  $ scale 0.3 0.3
+  $ text (show difficulty)
+  ]
 
 -- | helper for renderFromPos - calculates where the block should be in relation to
 --   its initial position in the centre of the display -- centre is 250, 550
