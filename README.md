@@ -24,5 +24,4 @@ Tutorial coming soon!
 
 6. `cabal run lambdalumps`
 
-
-Recommended settings: backend = gloss, and level 3 difficulty.
+Special thanks to [Manuel Bärenz](https://github.com/turion) and [Becky Conning](https://github.com/beckyconning) for support.
