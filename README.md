@@ -2,7 +2,9 @@
 
 LambdaLumps is a Tetris clone written in Haskell, structured in a way that the game model is independent of any rendering packages.
 
-The source files do also contain implementation for the game in [Gloss](https://hackage.haskell.org/package/gloss), and an implementation using [Gloss-Rhine](https://hackage.haskell.org/package/rhine-gloss) is currently under construction (unstable).
+The source files do also contain implementation for the game in [Gloss](https://hackage.haskell.org/package/gloss), and an implementation using [Gloss-Rhine](https://hackage.haskell.org/package/rhine-gloss).
+
+Tutorial coming soon!
 
 # Installation
 
