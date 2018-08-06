@@ -7,7 +7,7 @@ import Model.Gamestate
 import Model.Tetronimo
 
 --lambdalumps io
-import IO.RandomTetronimo
+import Model.RandomTetronimo
 
 handleHold :: Gamestate -> Gamestate
 handleHold game

@@ -36,16 +36,16 @@ library
     , rhine == 0.4.0.0
     , rhine-gloss
   exposed-modules:
-      Gloss.Interface
       Gloss.Render
       Model.Gamestate
       Model.Lib
+      Model.RandomTetronimo
       Model.Score
       Model.Tetronimo
       IO.Drop
       IO.Hold
+      IO.Interface
       IO.LeftRight
-      IO.RandomTetronimo
       IO.Rotate
       RhineGloss.GameBuilder
   other-modules:

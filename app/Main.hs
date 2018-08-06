@@ -27,16 +27,17 @@ main = do
   putStrLn "> backspace to hold"
   -- putStrLn "> d to increase difficulty"
   putStrLn "> p to pause"
-  putStrLn "                                                           "
-  putStrLn "> enter a number between 1 and 9 to set starting difficulty"
-  difficulty <- getLine
-  putStrLn $ "> starting LambdaLumps at level " ++ (parseDifficultyInput difficulty)
-  renderGame backend .  digitToInt $ head $ parseDifficultyInput difficulty
+  -- commenting this out for now, until I find a way to pass IO to the rhine gloss
+  -- putStrLn "                                                           "
+  -- putStrLn "> enter a number between 1 and 9 to set starting difficulty"
+  -- difficulty <- 1
+  putStrLn $ "> starting LambdaLumps at level " ++ (parseDifficultyInput "1")
+  renderGame backend .  digitToInt $ head $ parseDifficultyInput "1"
 
 parseDifficultyInput :: String -> String
 parseDifficultyInput input
   | input `elem` ["1","2","3","4","5","6","7","8","9"] = input
-  | otherwise                                          = "3"
+  | otherwise                                          = "1"
 
 renderGame :: String -> Int -> IO ()
 renderGame s i

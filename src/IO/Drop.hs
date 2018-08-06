@@ -15,7 +15,7 @@ dropTet tet blocks =
             (Pos (xcoord $ fourth tet) ((ycoord $ fourth tet) - difference))
             (shape tet)
             (rotation tet)
-              where difference = (lowYCoord tet) - (ycoord $ (highestObstruction tet blocks)) -2
+              where difference = (lowYCoord tet) - (ycoord $ (highestObstruction tet blocks)) -1
 
 highestObstruction :: Tetronimo -> SettledBlocks -> Pos
 highestObstruction tet blocks =
