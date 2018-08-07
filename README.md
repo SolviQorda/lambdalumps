@@ -12,7 +12,7 @@ Tutorial coming soon!
 
 2. `cd LambdaLumps`
 
-3. Ensure that [Haskell](https://www.haskell.org/platform) is installed. Cabal is included in the Haskell platform.
+3. Ensure that [Haskell](https://www.haskell.org/platform) is installed (core). Cabal is included in the Haskell platform.
 
 4. `cabal sandbox init`
 
