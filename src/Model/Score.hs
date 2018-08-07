@@ -5,9 +5,9 @@ module Model.Score where
 --Level	  Points for  Points for   Points for   Points for
 --          1 line	   2 lines	     3 lines	   4 lines
 
---0	        40	         100	          300	        1200
---1	        80	         200	          600	        2400
---2	        120	         300	          900	        3600
+--1	        40	         100	          300	        1200
+--2	        80	         200	          600	        2400
+--3	        120	         300	          900	        3600
 
 -- For each piece, the game also awards the number of points equal to the number of grid spaces that the player has continuously soft dropped the piece. Unlike the points for lines, this does not increase per level.
 
@@ -15,9 +15,9 @@ scoreForSoftDrop :: Int -> Int
 scoreForSoftDrop x = 4 + x
 
 scoreForClear :: Int -> Int -> Int -> Int
-scoreForClear numberOfLines level score
-    | numberOfLines == 1 = score + (40 * (level + 1))
-    | numberOfLines == 2 = score + (100 * (level + 1))
-    | numberOfLines == 3 = score + (300 * (level + 1))
-    | numberOfLines == 4 = score + (1200 * (level + 1))
+scoreForClear numberOfLines difficulty score
+    | numberOfLines == 1 = score + (40 * (difficulty))
+    | numberOfLines == 2 = score + (100 * (difficulty))
+    | numberOfLines == 3 = score + (300 * (difficulty))
+    | numberOfLines == 4 = score + (1200 * (difficulty))
     | otherwise          = score

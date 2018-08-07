@@ -52,7 +52,7 @@ settle nxnxtet game
                 currentTetronimo  = nextTetronimo game,
                 settledTetronimos = (collapseBlocks . fst $ clearedBlocks),
                 seed              = (succ $ (seed game)),
-                score             = (scoreForClear (snd $ clearedBlocks) (difficulty game) (score game))}
+                score             = (scoreForClear (snd $ clearedBlocks) (difficulty game) (score game) )}
   | otherwise
         = game {currentTetronimo  = move tet,
                 settledTetronimos = blocks,

@@ -51,4 +51,4 @@ stepThru game steps
      where nxnxtet = getTetronimo (seed game)
 
 nextGamestate :: Gamestate -> Float -> Gamestate
-nextGamestate game steps = game {difficulty = difficultyValue steps}
+nextGamestate game steps = game {difficulty = (100 - difficultyValue steps) `div` 10}

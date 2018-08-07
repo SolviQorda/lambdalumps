@@ -86,7 +86,7 @@ renderGamestate game
                         , playfieldBorder
                         , (renderScore gameScore)
                         , (renderHeldTetronimo $ hold game)
-                        , (renderDifficulty $ (100 - difficulty game) `div` 10)
+                        , (renderDifficulty $ (difficulty game))
                         , renderPlayText]
   where blocks    = settledTetronimos game
         tetronimo = currentTetronimo game

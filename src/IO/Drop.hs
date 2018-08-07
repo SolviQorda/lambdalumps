@@ -3,8 +3,8 @@ module IO.Drop where
 import Data.List
 
 --LambdaLumps
-import Model.Tetronimo
 import Model.Lib
+import Model.Tetronimo
 
 dropTet :: Tetronimo -> SettledBlocks -> Tetronimo
 dropTet tet blocks =
