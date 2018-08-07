@@ -45,7 +45,7 @@ stepThrough steps game
   | otherwise   =
     settle nxnxtet newGame
     where nxnxtet = getTetronimo (seed game)
-          newGame = game {difficulty = difficultyValue steps}
+          newGame = game {difficulty = (100 - difficultyValue steps) `div` 10}
 
 --aggregate all Picture functions
 renderGamestate :: Gamestate -> Picture
