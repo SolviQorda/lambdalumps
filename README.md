@@ -6,7 +6,7 @@ The source files do also contain implementation for the game in [Gloss](https://
 
 Tutorial coming soon!
 
-# Installation
+# Installation (Linux and OSX)
 
 1. `git clone https://github.com/SolviQorda/LambdaLumps`
 
