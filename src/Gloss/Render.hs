@@ -140,13 +140,13 @@ renderHeldTetronimo maybeTet
 
 colorScheme :: Shape -> Color
 colorScheme shape
-  | shape == IShape = chartreuse
-  | shape == OShape = red
-  | shape == JShape = azure
-  | shape == LShape = blue
-  | shape == TShape = rose
-  | shape == SShape = magenta
-  | shape == ZShape = orange
+  | shape == IShape = azure
+  | shape == OShape = rose
+  | shape == JShape = blue
+  | shape == LShape = orange
+  | shape == TShape = magenta
+  | shape == SShape = chartreuse
+  | shape == ZShape = red
   | otherwise       = black
 
 renderFromPos :: Pos -> Picture
