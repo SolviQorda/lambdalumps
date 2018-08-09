@@ -16,25 +16,14 @@ handleHold game
 
 holdTet :: Gamestate -> Gamestate
 holdTet game =
-  Gamestate (getTetronimo $ seed game)
-            (nextTetronimo game)
-            (settledTetronimos game)
-            (Just $ spawn . spawnCode . shape $ currentTetronimo game)
-            (seed game)
-            (score game)
-            (difficulty game)
-            (paused game)
+           game {
+           nextTetronimo = (getTetronimo $ seed game),
+           hold = (Just $ spawn . spawnCode . shape $ currentTetronimo game)
+         }
 
 swapHeldTet :: Gamestate -> Gamestate
 swapHeldTet game =
-  Gamestate (nextTetronimo game)
-            (spawn . spawnCode . shape $ fromJust $ hold game)
-            (settledTetronimos game)
-            (Just $ spawn . spawnCode . shape $ currentTetronimo game)
-            (seed game)
-            (score game)
-            (difficulty game)
-            (paused game)
-
-
---need to update the intro in main
+           game {
+           currentTetronimo = (spawn . spawnCode . shape $ fromJust $ hold game),
+           hold = (Just $ spawn . spawnCode . shape $ currentTetronimo game)
+         }

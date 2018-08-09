@@ -7,11 +7,13 @@ module Model.Gamestate where
 
 --lambdalumps
 import Model.Lib
+import Model.RandomTetronimo
 import Model.Score
 import Model.Tetronimo
+
 --lambdalumps io
-import Model.RandomTetronimo
 import IO.Rotate
+
 --rhine
 import FRP.Rhine
 import FRP.Rhine.SyncSF.Except
@@ -24,68 +26,38 @@ data Gamestate =
     currentTetronimo  :: Tetronimo,
     settledTetronimos :: SettledBlocks,
     hold              :: Maybe Tetronimo,
-    --For the RNG TODO: implement
     seed              :: Int,
     score             :: Int,
     difficulty        :: Int,
     paused            :: Bool
 } deriving (Eq)
 
-
+--initial gamestate
 getGamestate :: Gamestate
-getGamestate = initialGamestate
-
-nextGamestate :: Gamestate -> Gamestate
-nextGamestate game = settle nxnxtet (Gamestate
-                       (nextTetronimo game)
-                       (currentTetronimo game)
-                       (settledTetronimos game)
-                       (hold game)
-                       (seed game)
-                       (score game)
-                       (difficulty game)
-                       (paused game))
-                           where nxnxtet = getTetronimo (seed game)
-
---attempting to write a monadic instance to pass in a FRP.Behaviour
-nextGamestate' ::  Gamestate -> Maybe Gamestate
-nextGamestate' game  = do
-  Just game
-
-initialGamestate :: Gamestate
-initialGamestate = Gamestate
+getGamestate = Gamestate
                     (getTetronimo $ 13)
                     (getTetronimo $ (14))
                     []
                     (Nothing)
                     (13)
                     (0)
-                    (3)
+                    (1)
                     (False)
 
 -- | Given that this is the next next tetronimo, output the gamestate that arises from that
 settle :: Tetronimo -> Gamestate -> Gamestate
-settle nxnxtet g
+settle nxnxtet game
   | isItSettled tet blocks
-        = Gamestate nxnxtet
-                    nxtet
-                    (collapseBlocks . fst $ clearedBlocks)
-                    (hold g)
-                    (succ $ (seed g))
-                    (scoreForClear (snd $ clearedBlocks) level (score g))
-                    (difficulty g)
-                    (paused g)
+        = game {nextTetronimo     = nxnxtet,
+                currentTetronimo  = nextTetronimo game,
+                settledTetronimos = (collapseBlocks . fst $ clearedBlocks),
+                seed              = (succ $ (seed game)),
+                score             = (scoreForClear (snd $ clearedBlocks) (difficulty game) (score game) )}
   | otherwise
-        = Gamestate nxtet
-                    (move tet)
-                    blocks
-                    (hold g)
-                    (seed g)
-                    (scoreForSoftDrop $ score g)
-                    (difficulty g)
-                    (paused g)
+        = game {currentTetronimo  = move tet,
+                settledTetronimos = blocks,
+                score             = (scoreForSoftDrop $ score game)}
     where
-      tet           = currentTetronimo g
-      nxtet         = nextTetronimo g
-      blocks        = settledTetronimos g
+      tet           = currentTetronimo game
+      blocks        = settledTetronimos game
       clearedBlocks = clear $ ((settleTetronimo tet) ++ blocks)

@@ -18,7 +18,7 @@ import IO.Interface
 import IO.LeftRight
 import IO.Rotate
 
-
+--render the game, using the gloss helper functions
 renderGameGloss :: Int -> IO ()
 renderGameGloss difficultyInput = do
   let state = Gamestate
@@ -35,9 +35,19 @@ renderGameGloss difficultyInput = do
       renderGamestate parseEvent stepThrough
         where s = 8 - difficultyInput
 
---helper function
+--generate the window for the game
 getDisplay = InWindow "LambdaLumps" (600, 1300) (10, 10)
 
+
+stepThrough :: Float -> Gamestate -> Gamestate
+stepThrough steps game
+  | paused game = game
+  | otherwise   =
+    settle nxnxtet game
+    where nxnxtet = getTetronimo (seed game)
+
+
+--aggregate all Picture functions
 renderGamestate :: Gamestate -> Picture
 renderGamestate game
   | (isItSettled tetronimo blocks) && gameOver tetronimo =
@@ -76,27 +86,14 @@ renderGamestate game
                         , playfieldBorder
                         , (renderScore gameScore)
                         , (renderHeldTetronimo $ hold game)
-                        , (renderDifficulty $ (100 - difficulty game) `div` 10)
+                        , (renderDifficulty $ (difficulty game))
                         , renderPlayText]
   where blocks    = settledTetronimos game
         tetronimo = currentTetronimo game
         gameScore = score game
         next      = nextTetronimo game
 
-stepThrough :: Float -> Gamestate -> Gamestate
-stepThrough steps game
-  | paused game = game
-  | otherwise   =
-       settle nxnxtet (Gamestate
-                        (nextTetronimo game)
-                        (currentTetronimo game)
-                        (settledTetronimos game)
-                        (hold game)
-                        (seed game)
-                        (score game)
-                        (difficultyValue steps)
-                        (paused game))
-     where nxnxtet = getTetronimo (seed game)
+--Picture functions
 
 playfieldBorder :: Picture
 playfieldBorder = Color orange $ rectangleWire 500 1100
@@ -143,20 +140,19 @@ renderHeldTetronimo maybeTet
 
 colorScheme :: Shape -> Color
 colorScheme shape
-  | shape == IShape = chartreuse
-  | shape == OShape = red
-  | shape == JShape = azure
-  | shape == LShape = blue
-  | shape == TShape = rose
-  | shape == SShape = magenta
-  | shape == ZShape = orange
+  | shape == IShape = azure
+  | shape == OShape = rose
+  | shape == JShape = blue
+  | shape == LShape = orange
+  | shape == TShape = magenta
+  | shape == SShape = chartreuse
+  | shape == ZShape = red
   | otherwise       = black
 
 renderFromPos :: Pos -> Picture
 renderFromPos pos = translate x y $ rectangleSolid cellHeight cellHeight
   where x = fst $ fromCentreToPlayfield pos
         y = snd $ fromCentreToPlayfield pos
-
 
 renderPlayText :: Picture
 renderPlayText = Pictures [
@@ -168,25 +164,29 @@ renderPlayText = Pictures [
       Color black
       $ translate (-250) (590)
       $ scale 0.3 0.3
-      $ text ("next:")]
+      $ text ("next:")
+      ]
 
 renderScore :: Int -> Picture
 renderScore score = Pictures [
   Color black
   $ translate (-250) (-600)
   $ scale 0.3 0.3
-  $ text ("score: "),
+  $ text ("score: ")
+  ,
   Color black
   $ translate (-140) (-600)
   $ scale 0.3 0.3
-  $ text (show score) ]
+  $ text (show score)
+  ]
 
 renderDifficulty :: Int -> Picture
 renderDifficulty difficulty = Pictures [
   Color black
   $ translate (50) (-600)
   $ scale 0.3 0.3
-  $ text ("difficulty: "),
+  $ text ("difficulty: ")
+  ,
   Color black
   $ translate (205) (-600)
   $ scale 0.3 0.3
@@ -200,7 +200,6 @@ fromCentreToPlayfield pos =
   ((x - 225), (y - 525))
   where x = ((fromIntegral $ xcoord pos) * 50.00)
         y = ((fromIntegral $ ycoord pos) * 50.00)
-
 
 cellHeight :: Float
 cellHeight = 45.00
