@@ -26,13 +26,14 @@ import Model.RandomTetronimo
 
 import Model.DifficultyManager
 
-renderGameRhineGloss :: Int -> IO ()
-renderGameRhineGloss difficultyInput = flowGloss
+renderGameRhineGloss :: IO ()
+renderGameRhineGloss = flowGloss
                 getDisplay
                 white
                 100
                 $ glossRhine
 
+-- hoist the Gamestate onto a RhineGloss-friendly SF
 game :: GlossSyncSF Event
 game = feedback getGamestate $ proc (events, gamestate) -> do
   timeStep <- timeInfoOf sinceStart -< ()
@@ -42,6 +43,9 @@ game = feedback getGamestate $ proc (events, gamestate) -> do
 glossRhine :: GlossRhine Event
 glossRhine = buildGlossRhine Just game
 
+-- | handle a step of the clock, and only step through the gamestate
+--   if the period determined by the difficulty has passed
+
 stepThru :: Gamestate -> Float -> Gamestate
 stepThru game steps
   | paused game = game
@@ -49,6 +53,8 @@ stepThru game steps
        settle nxnxtet $ nextGamestate game steps
   | otherwise = game
      where nxnxtet = getTetronimo (seed game)
+
+--get the next gamestate, with the right difficulty for the time passed
 
 nextGamestate :: Gamestate -> Float -> Gamestate
 nextGamestate game steps = game {difficulty = (100 - difficultyValue steps) `div` 10}

@@ -43,9 +43,9 @@ stepThrough :: Float -> Gamestate -> Gamestate
 stepThrough steps game
   | paused game = game
   | otherwise   =
-    settle nxnxtet newGame
+    settle nxnxtet game
     where nxnxtet = getTetronimo (seed game)
-          newGame = game {difficulty = (100 - difficultyValue steps) `div` 10}
+
 
 --aggregate all Picture functions
 renderGamestate :: Gamestate -> Picture
