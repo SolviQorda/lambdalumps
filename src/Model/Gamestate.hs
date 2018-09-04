@@ -1,8 +1,3 @@
-{-# LANGUAGE Arrows          #-}
-{-# LANGUAGE RankNTypes      #-}
-{-# LANGUAGE RecordWildCards #-}
-{-# LANGUAGE TypeFamilies    #-}
-
 module Model.Gamestate where
 
 --lambdalumps
@@ -13,10 +8,6 @@ import Model.Tetronimo
 
 --lambdalumps io
 import IO.Rotate
-
---rhine
-import FRP.Rhine
-import FRP.Rhine.SyncSF.Except
 
 import Data.Fixed
 

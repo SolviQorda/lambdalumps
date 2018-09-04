@@ -8,10 +8,10 @@ extra-deps:
 - hspec-core-2.5.1
 - hspec-discover-2.5.1
 - QuickCheck-2.11.3
-- rhine-0.4.0.0
+- rhine-0.4.0.3
 - rhine-gloss-0.4.0.0
-- free-4.12.4
-- time-1.6.0.1
+- free-5.1
+- time-1.8.0.4
 
 
 resolver: lts-11.11

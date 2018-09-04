@@ -1,8 +1,3 @@
-{-# LANGUAGE Arrows          #-}
-{-# LANGUAGE RankNTypes      #-}
-{-# LANGUAGE RecordWildCards #-}
-{-# LANGUAGE TypeFamilies    #-}
--- {-# LANGUAGE ScopedTypeVariables    #-}
 
 module Model.Tetronimo where
 
