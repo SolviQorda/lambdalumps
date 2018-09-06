@@ -30,7 +30,7 @@ data Gamestate =
 data PlayState = Active | Paused | Over
   deriving (Eq, Show)
 
---initial gamestate - want to use RandT
+--initial gamestate - TODO: want to use RandT once issue is resolved
 getGamestate :: Gamestate
 getGamestate = Gamestate
                     (getTetronimo $ 13)
@@ -42,7 +42,6 @@ getGamestate = Gamestate
                     (5)
                     (Active)
 
--- | TODO: Arrowize
 -- | Given that this is the next next tetronimo, output the gamestate that arises from that
 
 settle :: Monad m => BehaviourF m Float Gamestate Gamestate
@@ -100,20 +99,3 @@ isTheGameOver game
   | otherwise                                                          = game
     where blocks    = settledTetronimos game
           tetronimo = currentTetronimo  game
-
--- settle' :: Tetronimo -> Gamestate -> Gamestate
--- settle' nxnxtet game
-    -- | isItSettled tet blocks
-        -- = game {nextTetronimo     = nxnxtet,
-            -- currentTetronimo  = nextTetronimo game,
-            -- settledTetronimos = (collapseBlocks . fst $ clearedBlocks),
-            -- seed              = (succ $ (seed game)),
-            -- score             = (scoreForClear (snd $ clearedBlocks) (difficulty game) (score game) )}
-    -- | otherwise
-    --  = game {currentTetronimo  = move tet,
-        -- settledTetronimos = blocks,
-        -- score             = (scoreForSoftDrop $ score game)}
-            -- where
-            --   tet           = currentTetronimo game
-            --   blocks        = settledTetronimos game
-            --   clearedBlocks = clear $ ((settleTetronimo tet) ++ blocks)

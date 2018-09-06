@@ -27,11 +27,7 @@ renderGamestate = proc game -> do
     returnA                              -< pictures
       [
       playStateScreen
-       -- to test state
-      , ( Color black
-          $ text (playstatetostring $ playState game))
       , renderPlayState' game
-
         ]
 
 renderActive :: Monad m => BehaviourF m Float Gamestate Picture
@@ -45,29 +41,12 @@ renderActive = proc game -> do
         , (renderHeldTetronimo $ hold game)
         , (renderDifficulty $ (difficulty game))
         , renderPlayText
-
         , scoreOnScreen]
-
---purely for debugging - remove once different playstates are fucntioning
-playstatetostring :: PlayState -> String
-playstatetostring x
-    | x == Over   = "Over"
-    | x == Paused = "Paused"
-    | x == Active = "Active"
-    | otherwise   = "nostate"
-
--- we need a way to handle change of playstate that actually checks the gamestate.
-
--- safely :: MSFExcept m a b Empty -> MSF m a b
--- throwOn :: Monad m => e -> MSF (ExceptT e m) Bool ()
--- throw the exception when the input is true.
 
 --the different playstates, depending on a verification of the gamestate.
 renderPlaystate' :: Monad m => BehaviourF m Float Gamestate Picture
 renderPlaystate' = safely $ do
   renderPlaystate
-  -- safe $ arr $ const $ Blank
-
 
 --draft new attempt at BFexcept
 renderPlaystate :: Monad m => BehaviourFExcept m Float Gamestate Picture Empty
