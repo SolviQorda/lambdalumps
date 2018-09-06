@@ -2,8 +2,6 @@
 {-# LANGUAGE PatternGuards #-}
 {-# LANGUAGE TypeFamilies      #-}
 
-
-
 module RhineGloss.Arrowized.IO.Interface where
 
 --lambdalumps
@@ -24,7 +22,7 @@ import Graphics.Gloss
 import FRP.Rhine
 import FRP.Rhine.SyncSF.Except
 
--- parseEvents as a BehaviourFExcept
+-- parseEvents as a BehaviourFExcept?
 -- parseEvents :: Monad m => BehaviourFExcept m Float (Event, Gamestate) Gamestate Empty
 -- parseEvents = do
 --     try $ proc ((G.EventKey key keyState _ _), game) -> do

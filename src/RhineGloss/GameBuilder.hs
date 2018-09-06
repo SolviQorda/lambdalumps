@@ -51,6 +51,7 @@ glossRhine = buildGlossRhine Just game
 
 -- | handle a step of the clock, and only step through the gamestate
 --   if the period determined by the difficulty has passed
+
 stepThru :: Monad m => BehaviourFExcept m Float Gamestate Gamestate Empty
 stepThru = do
     try $ proc game -> do
@@ -61,11 +62,12 @@ stepThru = do
         settle                         -< nextGamestate game steps
     try $ proc game -> do
         steps <- timeInfoOf sinceStart -< ()
-        _ <- throwOn ()                -< ((playState game) == Active)
-                                            && ((floor $ steps * 100) `mod` (difficultyValue steps) == 0)
+        _ <- throwOn ()     -< ((playState game) == Active)
+                                && ((floor $ steps * 100) `mod` (difficultyValue steps) == 0)
         returnA -< game
     stepThru
 
 --get the next gamestate, with the right difficulty for the time passed
+
 nextGamestate :: Gamestate -> Float -> Gamestate
 nextGamestate game steps = game {difficulty = (100 - difficultyValue steps) `div` 10}

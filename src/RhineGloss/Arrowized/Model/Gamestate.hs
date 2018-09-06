@@ -58,14 +58,14 @@ settleStates = do
         returnA         -< False
     try $ proc game -> do
         _ <- throwOn () -< not $ isItSettled (currentTetronimo game) (settledTetronimos game)
-        returnA         -< True 
+        returnA         -< True
     settleStates
 
 handleSettle :: Monad m => BehaviourFExcept m Float (Bool, Gamestate) Gamestate Empty
 handleSettle = do
     try $ proc (readyToSettle, game) -> do
         _       <- throwOn () -< readyToSettle == False
-        returnA               -< game {
+        returnA               -< isTheGameOver game {
                                       nextTetronimo     = getTetronimo $ seed game,
                                       currentTetronimo  = nextTetronimo game,
                                       settledTetronimos = getCollapsed $ tetToBlocks
