@@ -23,13 +23,13 @@ import FRP.Rhine
 import FRP.Rhine.SyncSF.Except
 
 -- parseEvents as a BehaviourFExcept?
--- parseEvents :: Monad m => BehaviourFExcept m Float (Event, Gamestate) Gamestate Empty
--- parseEvents = do
---     try $ proc ((G.EventKey key keyState _ _), game) -> do
---         -- let event = (G.EventKey key keyState _ _
---         _       <- throwOn () -< G.Char 'p' /= key && G.Down /= keyState
---         returnA               -< game {playState = handlePause $ playState game}
---     parseEvents
+parseEvents :: Monad m => BehaviourFExcept m Float (Event, Gamestate) Gamestate Gamestate
+parseEvents = do
+    try $ proc ((G.EventKey key keyState _ _), game) -> do
+        -- let event = (G.EventKey key keyState _ _
+        _       <- throwOn () -< G.Char 'p' == key && G.Down == keyState
+        returnA               -< game {playState = handlePause $ playState game}
+    parseEvents
 
 parseEvent' :: G.Event -> Gamestate -> Gamestate
 parseEvent' (G.EventKey key keyState _ _ ) game

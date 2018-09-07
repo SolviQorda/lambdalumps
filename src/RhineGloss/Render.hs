@@ -3,7 +3,6 @@
 {-# LANGUAGE RecordWildCards   #-}
 {-# LANGUAGE TypeFamilies      #-}
 
-
 module RhineGloss.Render where
 
 import Data.Maybe
@@ -23,12 +22,11 @@ import RhineGloss.Arrowized.Model.Lib
 --does this need to be an excvept, to handle isItSettled?
 renderGamestate :: Monad m => BehaviourF m Float Gamestate Picture
 renderGamestate = proc game -> do
-    playStateScreen <- renderPlaystate'  -< game
-    returnA                              -< pictures
-      [
-      playStateScreen
+    playStateScreen <- safely renderPlaystate  -< game
+    returnA                                    -< pictures
+      [ playStateScreen
       , renderPlayState' game
-        ]
+      ]
 
 renderActive :: Monad m => BehaviourF m Float Gamestate Picture
 renderActive = proc game -> do
@@ -41,14 +39,10 @@ renderActive = proc game -> do
         , (renderHeldTetronimo $ hold game)
         , (renderDifficulty $ (difficulty game))
         , renderPlayText
-        , scoreOnScreen]
+        , scoreOnScreen
+        ]
 
 --the different playstates, depending on a verification of the gamestate.
-renderPlaystate' :: Monad m => BehaviourF m Float Gamestate Picture
-renderPlaystate' = safely $ do
-  renderPlaystate
-
---draft new attempt at BFexcept
 renderPlaystate :: Monad m => BehaviourFExcept m Float Gamestate Picture Empty
 renderPlaystate = do
     try $ proc game -> do
