@@ -37,6 +37,7 @@ library
     , rhine-gloss
   exposed-modules:
       Gloss.Render
+      Model.DifficultyManager
       Model.Gamestate
       Model.Lib
       Model.RandomTetronimo
