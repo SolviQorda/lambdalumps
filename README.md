@@ -2,15 +2,17 @@
 
 LambdaLumps is a Tetris clone written in Haskell, structured in a way that the game model is independent of any rendering packages.
 
-The source files do also contain implementation for the game in [Gloss](https://hackage.haskell.org/package/gloss), and an implementation using [Gloss-Rhine](https://hackage.haskell.org/package/rhine-gloss) is currently under construction (unstable).
+The source files do also contain implementation for the game in [Gloss](https://hackage.haskell.org/package/gloss), and an implementation using [Gloss-Rhine](https://hackage.haskell.org/package/rhine-gloss).
 
-# Installation
+Tutorial coming soon!
+
+# Installation (Linux and OSX)
 
 1. `git clone https://github.com/SolviQorda/LambdaLumps`
 
 2. `cd LambdaLumps`
 
-3. Ensure that [Haskell](https://www.haskell.org/platform) is installed. Cabal is included in the Haskell platform.
+3. Ensure that [Haskell](https://www.haskell.org/platform) is installed (core). Cabal is included in the Haskell platform.
 
 4. `cabal sandbox init`
 
@@ -22,5 +24,4 @@ The source files do also contain implementation for the game in [Gloss](https://
 
 6. `cabal run lambdalumps`
 
-
-Recommended settings: backend = gloss, and level 3 difficulty.
+Special thanks to [Manuel Bärenz](https://github.com/turion) and [Becky Conning](https://github.com/beckyconning) for support.
