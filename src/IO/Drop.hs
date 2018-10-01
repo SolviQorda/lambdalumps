@@ -2,8 +2,6 @@ module IO.Drop where
 
 import Data.List
 
-import Debug.Trace
-
 --LambdaLumps
 import Model.Lib
 import Model.Tetronimo
