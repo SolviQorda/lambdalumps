@@ -8,31 +8,26 @@ import Model.Tetronimo
 
 dropTet :: Tetronimo -> SettledBlocks -> Tetronimo
 dropTet tet blocks =
-        Tetronimo
-            (Pos (xcoord $ first tet) ((ycoord $ first tet) - difference))
-            (Pos (xcoord $ second tet) ((ycoord $ second tet) - difference))
-            (Pos (xcoord $ third tet) ((ycoord $ third tet) - difference))
-            (Pos (xcoord $ fourth tet) ((ycoord $ fourth tet) - difference))
-            (shape tet)
-            (rotation tet)
-              where difference = (lowYCoord tet) - (ycoord $ (highestObstruction tet blocks)) -1
+    let nextTet = tet { first  = dropOne (first tet)
+                      , second = dropOne (second tet)
+                      , third  = dropOne (third tet)
+                      , fourth = dropOne (fourth tet)
+                      }
+    in if nextTet `isInside` blocks || belowFloor nextTet
+       then tet
+       else dropTet nextTet blocks
 
-highestObstruction :: Tetronimo -> SettledBlocks -> Pos
-highestObstruction tet blocks =
-  go (tetColumns tet) blocks []
-    where
-      go qs [] _ = Pos 0 0
-      go [] _ xs =  maximum $ xs
-      go (q:qs) blocks xs = go qs blocks ((highestInColumn blocks q):xs)
 
---finds the highest settled block in the column
-highestInColumn :: SettledBlocks -> Int -> Pos
-highestInColumn blocks q
-  | blocks       == [] = Pos 0 0
-  | obstructions == [] = Pos 0 0
-  | otherwise          = maximum $ obstructions
-      where obstructions = filter (\x -> (xcoord x) == q) blocks
 
---Columns occupied by the tetronimo
-tetColumns :: Tetronimo -> [Int]
-tetColumns tet = nub $ [(xcoord $ first tet), (xcoord $ second tet), (xcoord $ third tet), (xcoord $ fourth tet)]
+isInside :: Tetronimo -> SettledBlocks -> Bool
+isInside tet blocks = any (\pos -> pos `elem` blocks) [first tet, second tet, third tet, fourth tet]
+
+
+dropOne :: Pos -> Pos
+dropOne (Pos x y) = Pos x (y - 1)
+
+
+belowFloor :: Tetronimo -> Bool
+belowFloor tet = any (\pos -> ycoord pos < 0) [first tet, second tet, third tet, fourth tet]
+
+
