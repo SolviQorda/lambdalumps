@@ -36,7 +36,7 @@ renderGameGloss difficultyInput = do
         where s = 8 - difficultyInput
 
 --generate the window for the game
-getDisplay = InWindow "LambdaLumps" (600, 1300) (10, 10)
+getDisplay = InWindow "LambdaLumps" (600, 1000) (10, 10)
 
 
 stepThrough :: Float -> Gamestate -> Gamestate
@@ -52,7 +52,7 @@ renderGamestate :: Gamestate -> Picture
 renderGamestate game
   | (isItSettled tetronimo blocks) && gameOver tetronimo =
                   Pictures
-                      [ Color red $ rectangleSolid 600 1300
+                      [ Color red $ rectangleSolid 600 1000
                       , Color white
                           $ translate (-195) 0
                           $ scale 0.5 0.5 $text "Game Over!"
@@ -66,7 +66,7 @@ renderGamestate game
                           $ text ("You scored: " ++ (show $ gameScore)) ]
   | paused game        =
                   Pictures
-                      [ Color azure $ rectangleSolid 600 1300
+                      [ Color azure $ rectangleSolid 600 1000
                       , Color black
                           $ translate (-195) 0
                           $ scale 0.5 0.5 $ text "Paused"
@@ -96,7 +96,7 @@ renderGamestate game
 --Picture functions
 
 playfieldBorder :: Picture
-playfieldBorder = Color orange $ rectangleWire 500 1100
+playfieldBorder = Color orange $ rectangleWire 500 900
 
 renderSettledBlocks :: SettledBlocks -> Picture
 renderSettledBlocks blocks = Pictures $ map renderFromPos blocks
