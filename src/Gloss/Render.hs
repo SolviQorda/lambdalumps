@@ -96,7 +96,7 @@ renderGamestate game
 --Picture functions
 
 playfieldBorder :: Picture
-playfieldBorder = Color orange $ rectangleWire 500 900
+playfieldBorder = Color orange $ rectangleWire 367 800
 
 renderSettledBlocks :: SettledBlocks -> Picture
 renderSettledBlocks blocks = Pictures $ map renderFromPos blocks
@@ -111,7 +111,7 @@ renderTetronimo tet = Pictures [
 
 renderNextTetronimo :: Tetronimo -> Picture
 renderNextTetronimo tet =
-          translate (-100) (360)
+          translate (-100) (245)
           $ scale (0.5) (0.5)
           $ Pictures [
             (Color tetColor $ (renderFromPos $ T.first tet)),
@@ -124,11 +124,11 @@ renderHeldTetronimo :: Maybe Tetronimo -> Picture
 renderHeldTetronimo maybeTet
   | maybeTet == Nothing =
           Color black
-          $ translate (200) (590)
+          $ translate (200) (415)
           $ scale 0.3 0.3
           $ text (":(")
   | otherwise           =
-            translate (200) (360)
+            translate (200) (245)
           $ scale (0.5) (0.5)
           $ Pictures [
             (Color tetColor $ (renderFromPos $ T.first tet)),
@@ -157,49 +157,49 @@ renderFromPos pos = translate x y $ rectangleSolid cellHeight cellHeight
 renderPlayText :: Picture
 renderPlayText = Pictures [
       Color black
-      $ translate (50) (590)
+      $ translate (50) (415)
       $ scale 0.3 0.3
       $ text ("hold:")
       ,
       Color black
-      $ translate (-250) (590)
+      $ translate (-250) (415)
       $ scale 0.3 0.3
       $ text ("next:")
       ]
 
 renderScore :: Int -> Picture
 renderScore score = Pictures [
-  Color black
-  $ translate (-250) (-600)
-  $ scale 0.3 0.3
-  $ text ("score: ")
-  ,
-  Color black
-  $ translate (-140) (-600)
-  $ scale 0.3 0.3
-  $ text (show score)
-  ]
+      Color black
+      $ translate (-250) (-450)
+      $ scale 0.3 0.3
+      $ text ("score: ")
+      ,
+      Color black
+      $ translate (-140) (-450)
+      $ scale 0.3 0.3
+      $ text (show $ score)
+      ]
 
 renderDifficulty :: Int -> Picture
 renderDifficulty difficulty = Pictures [
-  Color black
-  $ translate (50) (-600)
-  $ scale 0.3 0.3
-  $ text ("difficulty: ")
-  ,
-  Color black
-  $ translate (205) (-600)
-  $ scale 0.3 0.3
-  $ text (show difficulty)
+      Color black
+      $ translate (50) (-450)
+      $ scale 0.3 0.3
+      $ text ("difficulty: ")
+      ,
+      Color black
+      $ translate (205) (-450)
+      $ scale 0.3 0.3
+      $ text (show difficulty)
   ]
 
 -- | helper for renderFromPos - calculates where the block should be in relation to
 --   its initial position in the centre of the display -- centre is 250, 550
 fromCentreToPlayfield :: Pos -> (Float, Float)
 fromCentreToPlayfield pos =
-  ((x - 225), (y - 525))
-  where x = ((fromIntegral $ xcoord pos) * 50.00)
-        y = ((fromIntegral $ ycoord pos) * 50.00)
+  ((x - 158.5), (y - 375))
+  where x = ((fromIntegral $ xcoord pos) * 36.36)
+        y = ((fromIntegral $ ycoord pos) * 36.36)
 
 cellHeight :: Float
-cellHeight = 45.00
+cellHeight = 32.72

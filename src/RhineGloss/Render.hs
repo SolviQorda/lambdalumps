@@ -47,23 +47,15 @@ renderActive = proc game -> do
 renderPlaystate :: Monad m => BehaviourFExcept m Float Gamestate Picture Empty
 renderPlaystate = do
     try $ proc game -> do
-        _ <- throwOn () -< playState game == Active
-        renderGameOver -< score game
+      _ <- throwOn () -< playState game /= Active
+      renderActive    -< game
     try $ proc game -> do
-        _ <- throwOn () -< playState game /= Active
-        renderActive    -< game
+      _ <- throwOn () -< playState game == Active || playState game == Over
+      renderPaused   -< score game
     try $ proc game -> do
-        _ <- throwOn () -< playState game == Active
-        renderPaused   -< score game
+      _ <- throwOn () -< playState game == Active
+      renderGameOver -< score game
     renderPlaystate
-
--- renderPlayState' :: Gamestate -> Picture
--- renderPlayState' game
---     | playState game == Paused =
---     renderPaused'$ score game
---     | playState game == Over =
---         renderGameOver' $ score game
---     | otherwise = Blank
 
 renderGameOver :: Monad m => BehaviourF m Float Int Picture
 renderGameOver = proc score -> do
@@ -101,12 +93,12 @@ renderScore :: Monad m => BehaviourF m Float Int Picture
 renderScore = proc score -> do
   returnA               -< pictures [
     Color black
-    $ translate (-250) (-600)
+    $ translate (-250) (-450)
     $ scale 0.3 0.3
     $ text ("score: ")
     ,
     Color black
-    $ translate (-140) (-600)
+    $ translate (-140) (-450)
     $ scale 0.3 0.3
     $ text (show $ score)
     ]
@@ -129,7 +121,7 @@ renderTetronimo tet = Pictures [
 
 renderNextTetronimo :: T.Tetronimo  -> Picture
 renderNextTetronimo tet =
-          translate (-100) (210)
+          translate (-100) (245)
           $ scale (0.5) (0.5)
           $ Pictures [
             (Color tetColor $ (renderFromPos $ T.first tet)),
@@ -142,11 +134,11 @@ renderHeldTetronimo :: Maybe T.Tetronimo  -> Picture
 renderHeldTetronimo maybeTet
   | maybeTet == Nothing =
           Color black
-          $ translate (200) (440)
+          $ translate (200) (415)
           $ scale 0.3 0.3
           $ text (":(")
   | otherwise           =
-            translate (200) (210)
+            translate (200) (245)
           $ scale (0.5) (0.5)
           $ Pictures [
             (Color tetColor $ (renderFromPos $ T.first tet)),
@@ -175,38 +167,25 @@ renderFromPos pos = translate x y $ rectangleSolid cellHeight cellHeight
 renderPlayText :: Picture
 renderPlayText = Pictures [
       Color black
-      $ translate (50) (440)
+      $ translate (50) (415)
       $ scale 0.3 0.3
       $ text ("hold:")
       ,
       Color black
-      $ translate (-250) (440)
+      $ translate (-250) (415)
       $ scale 0.3 0.3
       $ text ("next:")
       ]
 
--- renderScore :: Int -> Picture
--- renderScore score = Pictures [
---   Color black
---   $ translate (-250) (-600)
---   $ scale 0.3 0.3
---   $ text ("score: ")
---   ,
---   Color black
---   $ translate (-140) (-600)
---   $ scale 0.3 0.3
---   $ text (show score)
---   ]
-
 renderDifficulty :: Int -> Picture
 renderDifficulty difficulty = Pictures [
   Color black
-  $ translate (50) (-600)
+  $ translate (50) (-450)
   $ scale 0.3 0.3
   $ text ("difficulty: ")
   ,
   Color black
-  $ translate (205) (-600)
+  $ translate (205) (-450)
   $ scale 0.3 0.3
   $ text (show difficulty)
   ]
