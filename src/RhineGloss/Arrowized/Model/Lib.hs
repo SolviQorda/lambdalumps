@@ -1,16 +1,11 @@
-module Model.Lib where
+
+module RhineGloss.Arrowized.Model.Lib where
 
 --LambdaLumps
-import Model.Score
-import Model.Tetronimo
+import RhineGloss.Arrowized.Model.Score
+import RhineGloss.Arrowized.Model.Tetronimo
 
 import Data.List
-
---is the game over? Tetronimo needs to be settled
-gameOver :: Tetronimo -> Bool
-gameOver setTet
-  | topYCoord setTet > screenRoof = True
-  | otherwise                     = False
 
 --clear blocks on full lines
 clear :: SettledBlocks -> (SettledBlocks, Int)

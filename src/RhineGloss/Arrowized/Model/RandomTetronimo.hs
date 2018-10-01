@@ -1,8 +1,6 @@
-module Model.RandomTetronimo where
+module RhineGloss.Arrowized.Model.RandomTetronimo where
 
-import System.IO.Unsafe
-
-import Model.Tetronimo
+import RhineGloss.Arrowized.Model.Tetronimo
 
 getTetronimo :: Int -> Tetronimo
 getTetronimo q
@@ -41,7 +39,7 @@ spawnCode shape
   | otherwise       = 1
 
 sequenceList :: [Int]
-sequenceList = [6, 2,	3, 6,	1,
+sequenceList = [6, 2, 3, 6,	1,
                 1, 1,	5, 2,	1,
                 7, 4,	7, 2,	3,
                 2, 6,	1, 2,	4,
