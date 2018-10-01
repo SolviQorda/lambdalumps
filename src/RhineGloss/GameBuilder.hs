@@ -36,7 +36,7 @@ renderGameRhineGloss = flowGloss
                         100
                         $ glossRhine
 
-getDisplay = InWindow "LambdaLumps" (600, 1300) (10, 10)
+getDisplay = InWindow "LambdaLumps" (600, 1000) (10, 10)
 
 game :: GlossSyncSF Event
 game = feedback getGamestate $ proc (events, gamestate) -> do

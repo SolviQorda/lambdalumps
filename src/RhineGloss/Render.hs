@@ -19,15 +19,16 @@ import RhineGloss.Arrowized.Model.Gamestate
 import qualified RhineGloss.Arrowized.Model.Tetronimo as T
 import RhineGloss.Arrowized.Model.Lib
 
---does this need to be an excvept, to handle isItSettled?
+--render the gamestate
 renderGamestate :: Monad m => BehaviourF m Float Gamestate Picture
 renderGamestate = proc game -> do
     playStateScreen <- safely renderPlaystate  -< game
     returnA                                    -< pictures
       [ playStateScreen
-      , renderPlayState' game
+      -- , renderPlayState game
       ]
 
+--render the active game screen
 renderActive :: Monad m => BehaviourF m Float Gamestate Picture
 renderActive = proc game -> do
     scoreOnScreen   <- renderScore -< score $ game
@@ -56,10 +57,18 @@ renderPlaystate = do
         renderPaused   -< score game
     renderPlaystate
 
+-- renderPlayState' :: Gamestate -> Picture
+-- renderPlayState' game
+--     | playState game == Paused =
+--     renderPaused'$ score game
+--     | playState game == Over =
+--         renderGameOver' $ score game
+--     | otherwise = Blank
+
 renderGameOver :: Monad m => BehaviourF m Float Int Picture
 renderGameOver = proc score -> do
     returnA   -< pictures
-        [ Color red $ rectangleSolid 600 1300
+        [ Color red $ rectangleSolid 600 1000
         , Color white
             $ translate (-195) 0
             $ scale 0.5 0.5 $text "Game Over!"
@@ -75,7 +84,7 @@ renderGameOver = proc score -> do
 renderPaused :: Monad m => BehaviourF m Float Int Picture
 renderPaused = proc score -> do
   returnA    -< pictures
-      [ Color azure $ rectangleSolid 600 1300
+      [ Color azure $ rectangleSolid 600 1000
       , Color black
           $ translate (-195) 0
           $ scale 0.5 0.5 $ text "Paused"
@@ -87,46 +96,6 @@ renderPaused = proc score -> do
           $ translate (-150) (-150)
           $ scale 0.3 0.3
           $ text ("Current score: " ++ (show $ score)) ]
-
---pure alternative for testing purposes
-renderPlayState' :: Gamestate -> Picture
-renderPlayState' game
-    | playState game == Paused =
-    renderPaused'$ score game
-    | playState game == Over =
-        renderGameOver' $ score game
-    | otherwise = Blank
-
-renderGameOver' :: Int -> Picture
-renderGameOver' score = pictures
-        [ Color red $ rectangleSolid 600 1300
-        , Color white
-            $ translate (-195) 0
-            $ scale 0.5 0.5 $text "Game Over!"
-        , Color white
-            $ translate (-150) (-200)
-            $ scale 0.3 0.3
-            $ text "Hit r to reset"
-        , Color white
-            $ translate (-150) (-150)
-            $ scale 0.3 0.3
-            $ text ("You scored: " ++ (show $ score)) ]
-
-
-renderPaused' :: Int ->  Picture
-renderPaused' score = pictures
-    [ Color azure $ rectangleSolid 600 1300
-    , Color black
-        $ translate (-195) 0
-        $ scale 0.5 0.5 $ text "Paused"
-    , Color black
-        $ translate (-150) (-200)
-        $ scale 0.3 0.3
-        $ text "Hit p to go back"
-    , Color black
-        $ translate (-150) (-150)
-        $ scale 0.3 0.3
-        $ text ("Current score: " ++ (show $ score)) ]
 
 renderScore :: Monad m => BehaviourF m Float Int Picture
 renderScore = proc score -> do
@@ -145,7 +114,7 @@ renderScore = proc score -> do
 --straight imports - division for refactoring purposes
 
 playfieldBorder :: Picture
-playfieldBorder = Color orange $ rectangleWire 500 1100
+playfieldBorder = Color orange $ rectangleWire 367 800
 
 renderSettledBlocks :: T.SettledBlocks -> Picture
 renderSettledBlocks blocks = Pictures $ map renderFromPos blocks
@@ -160,7 +129,7 @@ renderTetronimo tet = Pictures [
 
 renderNextTetronimo :: T.Tetronimo  -> Picture
 renderNextTetronimo tet =
-          translate (-100) (360)
+          translate (-100) (210)
           $ scale (0.5) (0.5)
           $ Pictures [
             (Color tetColor $ (renderFromPos $ T.first tet)),
@@ -173,11 +142,11 @@ renderHeldTetronimo :: Maybe T.Tetronimo  -> Picture
 renderHeldTetronimo maybeTet
   | maybeTet == Nothing =
           Color black
-          $ translate (200) (590)
+          $ translate (200) (440)
           $ scale 0.3 0.3
           $ text (":(")
   | otherwise           =
-            translate (200) (360)
+            translate (200) (210)
           $ scale (0.5) (0.5)
           $ Pictures [
             (Color tetColor $ (renderFromPos $ T.first tet)),
@@ -206,12 +175,12 @@ renderFromPos pos = translate x y $ rectangleSolid cellHeight cellHeight
 renderPlayText :: Picture
 renderPlayText = Pictures [
       Color black
-      $ translate (50) (590)
+      $ translate (50) (440)
       $ scale 0.3 0.3
       $ text ("hold:")
       ,
       Color black
-      $ translate (-250) (590)
+      $ translate (-250) (440)
       $ scale 0.3 0.3
       $ text ("next:")
       ]
@@ -246,9 +215,9 @@ renderDifficulty difficulty = Pictures [
 --   its initial position in the centre of the display -- centre is 250, 550
 fromCentreToPlayfield :: T.Pos -> (Float, Float)
 fromCentreToPlayfield pos =
-  ((x - 225), (y - 525))
-  where x = ((fromIntegral $ T.xcoord pos) * 50.00)
-        y = ((fromIntegral $ T.ycoord pos) * 50.00)
+  ((x - 158.5), (y - 375))
+  where x = ((fromIntegral $ T.xcoord pos) * 36.36)
+        y = ((fromIntegral $ T.ycoord pos) * 36.36)
 
 cellHeight :: Float
-cellHeight = 45.00
+cellHeight = 32.72
