@@ -1,20 +1,66 @@
 module RhineGloss.Arrowized.IO.Rotate where
 
 import RhineGloss.Arrowized.Model.Tetronimo
+import RhineGloss.Arrowized.Model.Lib (isInside)
 
---Rotation Functions
 
-rotateCW :: Tetronimo -> Tetronimo
-rotateCW tet
-    | s == OShape = tet
-    | (s == IShape) && (edgeGuard tet) = rotateICW tet
-    | (s == SShape) && (edgeGuard tet) = rotateSCW tet
-    | (s == ZShape) && (edgeGuard tet) = rotateZCW tet
-    | (s == LShape) && (edgeGuard tet) = rotateLCW tet
-    | (s == JShape) && (edgeGuard tet) = rotateJCW tet
-    | (s == TShape) && (edgeGuard tet) = rotateTCW tet
-    | otherwise = tet
-        where s = shape tet
+-- | Rotate a tetronimo. If there isn't space to rotate, wallkick
+--   (right first, then left)
+rotateTet :: Tetronimo -> SettledBlocks -> Tetronimo
+rotateTet tet blocks
+  | isValidPosition rotated = rotated
+  | isValidPosition rotatedRight = rotatedRight
+  | isValidPosition rotatedLeft = rotatedLeft
+  | otherwise = tet
+  where
+    rotated      = tryRotate tet
+    rotatedRight = tryRotate (kickRight tet)
+    rotatedLeft  = tryRotate (kickLeft tet)
+    kickLeft  = kick pred
+    kickRight = kick succ
+    isValidPosition tet = not (tet `isInside` blocks) && not (outsideBounds tet)
+
+
+-- | Check if a tetronimo is outside the bounds of the playarea
+outsideBounds :: Tetronimo -> Bool
+outsideBounds tet = any (<0) xs || any (>9) xs || any (<0) ys
+  where
+    xs = map xcoord [first tet, second tet, third tet, fourth tet]
+    ys = map ycoord [first tet, second tet, third tet, fourth tet]
+
+
+-- | kick is a convinience function, that modifies the xcoords of
+--   a tetronimo according to the function it is given
+kick :: (Int -> Int) -> Tetronimo -> Tetronimo
+kick f tet =
+  tet { first  = Pos (f x1) y1
+      , second = Pos (f x2) y2
+      , third  = Pos (f x3) y3
+      , fourth = Pos (f x4) y4
+      }
+  where
+    Pos x1 y1 = first tet
+    Pos x2 y2 = second tet
+    Pos x3 y3 = third tet
+    Pos x4 y4 = fourth tet
+
+
+-- | Try to rotate a tetronimo.
+--   this function does no tests to see if it results in a valid position
+tryRotate tet =
+    (case shape tet of
+        OShape -> id
+        IShape -> rotateICW
+        SShape -> rotateSCW
+        ZShape -> rotateZCW
+        LShape -> rotateLCW
+        JShape -> rotateJCW
+        TShape -> rotateTCW
+    ) tet
+
+
+-- Rotation Functions
+
 
 rotateICW :: Tetronimo -> Tetronimo
 rotateICW tet
@@ -258,19 +304,3 @@ rotateJCW tet
             y2 = (ycoord $ second tet)
             y3 = (ycoord $ third tet)
             y4 = (ycoord $ fourth tet)
-
-edgeGuard :: Tetronimo -> Bool
-edgeGuard tet
-  | (pred x1) < 0 = False
-  | (pred x2) < 0 = False
-  | (pred x3) < 0 = False
-  | (pred x4) < 0 = False
-  | (succ x1) > 9 = False
-  | (succ x2) > 9 = False
-  | (succ x3) > 9 = False
-  | (succ x4) > 9 = False
-  | otherwise     = True
-    where x1 = (xcoord $ first tet)
-          x2 = (xcoord $ second tet)
-          x3 = (xcoord $ third tet)
-          x4 = (xcoord $ fourth tet)

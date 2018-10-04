@@ -29,7 +29,7 @@ parseEvent (G.EventKey key keyState _ _ ) game
     -- handle rotation
     | G.SpecialKey G.KeyTab    <- key
     , G.Down                   <- keyState
-    = game {currentTetronimo = (rotateCW (currentTetronimo game))}
+    = game {currentTetronimo = (rotateTet (currentTetronimo game) (settledTetronimos game))}
     -- handle drops
     | G.SpecialKey G.KeyEnter  <- key
     , G.Down                   <- keyState
