@@ -24,4 +24,4 @@ Tutorial coming soon!
 
 6. `cabal run lambdalumps`
 
-Special thanks to [Manuel Bärenz](https://github.com/turion) and [Becky Conning](https://github.com/beckyconning) for support.
+Special thanks to [Manuel Bärenz](https://github.com/turion), [Avery Lychee](https://github.com/AveryLychee) and [Becky Conning](https://github.com/beckyconning) for support and contributions.
