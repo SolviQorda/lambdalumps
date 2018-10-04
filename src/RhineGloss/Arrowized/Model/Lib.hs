@@ -72,3 +72,6 @@ collapseBlocks xs = go 0 xs
 
 settleTetronimo :: Tetronimo -> SettledBlocks
 settleTetronimo tet = [first tet, second tet, third tet, fourth tet]
+
+isInside :: Tetronimo -> SettledBlocks -> Bool
+isInside tet blocks = any (\pos -> pos `elem` blocks) [first tet, second tet, third tet, fourth tet]

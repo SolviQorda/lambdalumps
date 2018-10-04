@@ -19,8 +19,6 @@ dropTet tet blocks =
 
 
 
-isInside :: Tetronimo -> SettledBlocks -> Bool
-isInside tet blocks = any (\pos -> pos `elem` blocks) [first tet, second tet, third tet, fourth tet]
 
 
 dropOne :: Pos -> Pos
